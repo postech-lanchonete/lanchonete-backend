@@ -1,6 +1,6 @@
-package br.com.lanchonetebairro.persistence;
+package br.com.lanchonetebairro.infraestructure.repositories;
 
-import br.com.lanchonetebairro.entities.Cliente;
+import br.com.lanchonetebairro.infraestructure.entities.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

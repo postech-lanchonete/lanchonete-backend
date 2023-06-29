@@ -1,8 +1,9 @@
-package br.com.lanchonetebairro.entities;
+package br.com.lanchonetebairro.infraestructure.entities;
 
-import br.com.lanchonetebairro.enums.StatusDoPedido;
+import br.com.lanchonetebairro.business.enums.StatusDoPedido;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -24,6 +25,19 @@ public class Pedido {
 
     @Enumerated(EnumType.STRING)
     private StatusDoPedido statusDoPedido;
+
+    private LocalDateTime dataCriacao;
+
+    public Pedido(Cliente cliente, List<Produto> produtos) {
+        this.statusDoPedido = StatusDoPedido.RECEBIDO;
+        this.dataCriacao = LocalDateTime.now();
+        this.cliente = cliente;
+        this.produtos = produtos;
+    }
+
+    public Pedido() {
+
+    }
 
     public Long getId() {
         return id;
@@ -51,5 +65,13 @@ public class Pedido {
 
     public void setStatusDoPedido(StatusDoPedido statusDoPedido) {
         this.statusDoPedido = statusDoPedido;
+    }
+
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(LocalDateTime dataCriacao) {
+        this.dataCriacao = dataCriacao;
     }
 }

@@ -1,4 +1,4 @@
-package br.com.lanchonetebairro.entities;
+package br.com.lanchonetebairro.infraestructure.entities;
 
 import jakarta.persistence.*;
 

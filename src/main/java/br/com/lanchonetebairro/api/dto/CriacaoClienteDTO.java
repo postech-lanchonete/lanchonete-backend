@@ -1,30 +1,21 @@
-package br.com.lanchonetebairro.entities;
+package br.com.lanchonetebairro.api.dto;
 
-import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
-import java.math.BigDecimal;
-
-@Entity
-@Table(name = "Clientes")
-public class Cliente {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class CriacaoClienteDTO {
+    @NotBlank(message = "Nome é mandatorio")
     private String nome;
-
+    @NotBlank(message = "Sobrenome é mandatorio")
     private String sobrenome;
-
-    @Column(unique = true)
+    @NotBlank(message = "E-mail é mandatorio")
+    @Email(message = "O e-mail precisa estar em um formato correto, por exemplo teste@teste.com.br")
+    private String email;
+    @NotBlank(message = "CPF é mandatorio")
     private String cpf;
 
-    private String email;
-
+    @NotBlank(message = "Senha é mandatorio")
     private String senha;
-
-    public Long getId() {
-        return id;
-    }
 
     public String getNome() {
         return nome;
@@ -42,20 +33,20 @@ public class Cliente {
         this.sobrenome = sobrenome;
     }
 
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public String getSenha() {
