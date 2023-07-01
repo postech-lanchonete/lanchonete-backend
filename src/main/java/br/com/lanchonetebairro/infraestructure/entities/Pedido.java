@@ -1,6 +1,6 @@
 package br.com.lanchonetebairro.infraestructure.entities;
 
-import br.com.lanchonetebairro.business.enums.StatusDoPedido;
+import br.com.lanchonetebairro.domain.enums.StatusDoPedido;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;

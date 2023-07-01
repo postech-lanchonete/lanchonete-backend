@@ -1,6 +1,6 @@
 package br.com.lanchonetebairro.infraestructure.repositories;
 
-import br.com.lanchonetebairro.business.enums.StatusDoPedido;
+import br.com.lanchonetebairro.domain.enums.StatusDoPedido;
 import br.com.lanchonetebairro.infraestructure.entities.Pedido;
 import org.springframework.data.jpa.repository.JpaRepository;
 

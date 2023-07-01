@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
 
 @Tag(name = "Clientes", description = "Todas as operações referentes aos clientes")
 public interface ClienteAPI {
@@ -22,7 +21,7 @@ public interface ClienteAPI {
             @ApiResponse(responseCode = "202", description = "Cliente criado." ),
             @ApiResponse(responseCode = "400", description = "Algum dos atributos está incorreto.", content = { @Content(schema = @Schema()) })
     })
-    ResponseEntity<Void> criar(@Valid CriacaoClienteDTO cliente);
+    ClienteResponseDTO criar(@Valid CriacaoClienteDTO cliente);
 
     @Operation(
             summary = "Buscar cliente por CPF",

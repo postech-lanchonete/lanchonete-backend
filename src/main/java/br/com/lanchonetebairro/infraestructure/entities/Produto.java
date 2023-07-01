@@ -1,5 +1,6 @@
 package br.com.lanchonetebairro.infraestructure.entities;
 
+import br.com.lanchonetebairro.domain.enums.CategoriaProduto;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -13,7 +14,7 @@ public class Produto {
 
     private String nome;
 
-    private String categoria;
+    private CategoriaProduto categoria;
 
     private BigDecimal preco;
 
@@ -33,11 +34,11 @@ public class Produto {
         this.nome = nome;
     }
 
-    public String getCategoria() {
+    public CategoriaProduto getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(String categoria) {
+    public void setCategoria(CategoriaProduto categoria) {
         this.categoria = categoria;
     }
 
@@ -63,5 +64,9 @@ public class Produto {
 
     public void setImagem(String imagem) {
         this.imagem = imagem;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

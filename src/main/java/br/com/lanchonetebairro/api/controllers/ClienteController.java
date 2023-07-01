@@ -3,9 +3,8 @@ package br.com.lanchonetebairro.api.controllers;
 import br.com.lanchonetebairro.api.ClienteAPI;
 import br.com.lanchonetebairro.api.dto.ClienteResponseDTO;
 import br.com.lanchonetebairro.api.dto.CriacaoClienteDTO;
-import br.com.lanchonetebairro.business.ClienteService;
+import br.com.lanchonetebairro.domain.services.ClienteService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,9 +18,9 @@ public class ClienteController implements ClienteAPI {
 
     @Override
     @PostMapping
-    public ResponseEntity<Void> criar(@RequestBody CriacaoClienteDTO cliente) {
-        ClienteResponseDTO clienteSalvo = clienteService.criarCliente(cliente);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    @ResponseStatus(HttpStatus.CREATED)
+    public ClienteResponseDTO criar(@RequestBody CriacaoClienteDTO cliente) {
+        return clienteService.criarCliente(cliente);
     }
 
     @Override

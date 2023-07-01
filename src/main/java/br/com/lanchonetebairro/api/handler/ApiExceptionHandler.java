@@ -1,5 +1,6 @@
 package br.com.lanchonetebairro.api.handler;
 
+import br.com.lanchonetebairro.domain.exceptions.NotFoundException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(NotFoundException.class)
+    public final ResponseEntity<ExceptionResponse> handleNotFoundException(NotFoundException e) {
+        return new ResponseEntity<>(new ExceptionResponse(ErrorType.GENERIC_SERVER_ERROR,
+                e.getMessage()), HttpStatus.NOT_FOUND);
+    }
 
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<ExceptionResponse> handleGenericException(Exception e) {

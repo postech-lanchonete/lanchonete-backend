@@ -10,7 +10,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.ResponseEntity;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public interface PedidoAPI {
             @ApiResponse(responseCode = "202", description = "Pedido criado." ),
             @ApiResponse(responseCode = "422", description = "O usuário, ou os produtos não foram encontrados.", content = { @Content(schema = @Schema()) })
     })
-    ResponseEntity<Void> criar(CriacaoPedidoDTO pedido);
+    CriacaoPedidoDTO criar(@Valid @RequestBody CriacaoPedidoDTO pedido);
 
     @Operation(
             summary = "Busca pedidos por estado",
@@ -35,9 +36,22 @@ public interface PedidoAPI {
             @ApiResponse(responseCode = "200", content = {
                     @Content(
                             mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = CriacaoPedidoDTO.class)))
+                            array = @ArraySchema(schema = @Schema(implementation = PedidoResponseDTO.class)))
             }),
             @ApiResponse(responseCode = "400", description = "O status solicitado não existe.", content = { @Content(schema = @Schema()) })
     })
     List<PedidoResponseDTO> buscarPorStatus(@Parameter(description = "Status do pedido.", required = true) String statusDoPedido);
+
+    @Operation(
+            summary = "Busca pedidos",
+            description = "Busca todos os pedidos."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(
+                            mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = PedidoResponseDTO.class)))
+            }),
+    })
+    List<PedidoResponseDTO> buscarTodos();
 }

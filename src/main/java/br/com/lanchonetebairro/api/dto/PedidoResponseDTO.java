@@ -1,6 +1,6 @@
 package br.com.lanchonetebairro.api.dto;
 
-import br.com.lanchonetebairro.business.enums.StatusDoPedido;
+import br.com.lanchonetebairro.domain.enums.StatusDoPedido;
 
 import java.time.LocalDateTime;
 import java.util.List;

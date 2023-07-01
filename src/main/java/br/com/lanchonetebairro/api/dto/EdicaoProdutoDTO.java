@@ -5,33 +5,23 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.math.BigDecimal;
 
-public class ProdutoResponseDTO {
+@Schema(description = "Objeto de edição de dados para produto")
+public class EdicaoProdutoDTO {
 
-    @Schema(description = "ID do produto.")
-    private Long id;
-    @Schema(description = "Nome do produto.")
+    @Schema(description = "Nome do produto")
     private String nome;
-
-
     @Schema(description = "Categoria do produto.", enumAsRef = true)
     private CategoriaProduto categoria;
 
     @Schema(description = "Preço do produto.")
     private BigDecimal preco;
 
-    @Schema(description = "Descrição do produto.")
+    @Schema(description = "Descrição do produto")
     private String descricao;
 
-    @Schema(description = "Imagem do produto em BLOB.")
+    @Schema(description = "Imagem do produto em BLOB")
     private String imagem;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getNome() {
         return nome;

@@ -1,4 +1,4 @@
-package br.com.lanchonetebairro.business.enums;
+package br.com.lanchonetebairro.domain.enums;
 
 public enum StatusDoPedido {
     RECEBIDO,
