@@ -1,5 +1,7 @@
 package br.com.lanchonetebairro.core.applications.services.implementation;
 
+import br.com.lanchonetebairro.adapter.driven.api.notificacao.NotificacaoEmailPort;
+import br.com.lanchonetebairro.adapter.driven.api.pagamento.PagamentoPort;
 import br.com.lanchonetebairro.adapter.driver.api.dto.CriacaoPedidoDTO;
 import br.com.lanchonetebairro.adapter.driver.api.dto.PedidoResponseDTO;
 import br.com.lanchonetebairro.core.applications.exceptions.NegocioException;
@@ -25,16 +27,20 @@ public class PedidoServiceImpl implements PedidoService {
     private final PedidoRepository pedidoRepository;
     private final ProdutoRepository produtoRepository;
     private final PedidoMapper pedidoMapper;
+    private final NotificacaoEmailPort notificacaoEmailPort;
+    private final PagamentoPort pagamentoPort;
 
 
     public PedidoServiceImpl(ClienteRepository clienteRepository,
                              PedidoRepository pedidoRepository,
                              ProdutoRepository produtoRepository,
-                             PedidoMapper pedidoMapper) {
+                             PedidoMapper pedidoMapper, NotificacaoEmailPort notificacaoEmailPort, PagamentoPort pagamentoPort) {
         this.clienteRepository = clienteRepository;
         this.pedidoRepository = pedidoRepository;
         this.produtoRepository = produtoRepository;
         this.pedidoMapper = pedidoMapper;
+        this.notificacaoEmailPort = notificacaoEmailPort;
+        this.pagamentoPort = pagamentoPort;
     }
 
     @Override
@@ -48,6 +54,7 @@ public class PedidoServiceImpl implements PedidoService {
                 .orElseThrow(() -> new NegocioException(String.format("Cliente não encontrado com o cpf %s", pedidoDTO.getCpfCliente())));
         List<Produto> produtos = buscarProdutos(pedidoDTO.getIdsProdutos());
         Pedido pedido = new Pedido(cliente, produtos);
+        pagamentoPort.realizarPagamento(pedido);
         pedidoRepository.save(pedido);
         return pedidoMapper.toDto(pedido);
     }
@@ -63,6 +70,9 @@ public class PedidoServiceImpl implements PedidoService {
                 .orElseThrow(() -> new NotFoundException(String.format("Pedido não encontrado com o id %d", id)));
         pedido.mudarStatus();
         pedidoRepository.save(pedido);
+        if (pedido.getStatus() == StatusDoPedido.FINALIZADO) {
+            notificacaoEmailPort.notificaCliente(pedido.getCliente(), "Seu pedido está pronto. Venha buscar!");
+        }
         return pedidoMapper.toDto(pedido);
     }
 
