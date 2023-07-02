@@ -52,7 +52,7 @@ public interface PedidoAPI {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Pedido criado." ),
-            @ApiResponse(responseCode = "422", description = "O usuário, ou os produtos não foram encontrados.", content = { @Content(schema = @Schema()) })
+            @ApiResponse(responseCode = "404", description = "O usuário, ou os produtos não foram encontrados.", content = { @Content(schema = @Schema()) })
     })
     PedidoResponseDTO criar(@Valid @RequestBody CriacaoPedidoDTO pedido);
 

@@ -1,11 +1,9 @@
 package br.com.lanchonetebairro.core.applications.services;
 
-import br.com.lanchonetebairro.adapter.driver.api.dto.ClienteResponseDTO;
-import br.com.lanchonetebairro.adapter.driver.api.dto.CriacaoClienteDTO;
+import br.com.lanchonetebairro.core.domain.entities.Cliente;
 
 public interface ClienteService {
+    Cliente buscarPorCpf(String cpf);
 
-    ClienteResponseDTO buscarPorCPF(String cpf);
-    ClienteResponseDTO criarCliente(CriacaoClienteDTO clienteDTO);
-
+    Cliente salvar(Cliente cliente);
 }

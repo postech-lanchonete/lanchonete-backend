@@ -140,7 +140,7 @@ public class PedidoControllerIntegrationTest {
         mockMvc.perform(post("/v1/pedidos")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(pedidoDTO)))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -157,7 +157,7 @@ public class PedidoControllerIntegrationTest {
         mockMvc.perform(post("/v1/pedidos")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(pedidoDTO)))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isNotFound());
     }
 
     @Test
