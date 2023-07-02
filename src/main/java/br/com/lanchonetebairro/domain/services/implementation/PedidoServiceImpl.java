@@ -3,8 +3,9 @@ package br.com.lanchonetebairro.domain.services.implementation;
 import br.com.lanchonetebairro.api.dto.CriacaoPedidoDTO;
 import br.com.lanchonetebairro.api.dto.PedidoResponseDTO;
 import br.com.lanchonetebairro.domain.enums.StatusDoPedido;
+import br.com.lanchonetebairro.domain.exceptions.NegocioException;
+import br.com.lanchonetebairro.domain.exceptions.NotFoundException;
 import br.com.lanchonetebairro.domain.mappers.PedidoMapper;
-import br.com.lanchonetebairro.domain.mappers.ProdutoMapper;
 import br.com.lanchonetebairro.domain.services.PedidoService;
 import br.com.lanchonetebairro.infraestructure.entities.Cliente;
 import br.com.lanchonetebairro.infraestructure.entities.Pedido;
@@ -28,7 +29,8 @@ public class PedidoServiceImpl implements PedidoService {
 
     public PedidoServiceImpl(ClienteRepository clienteRepository,
                              PedidoRepository pedidoRepository,
-                             ProdutoRepository produtoRepository, PedidoMapper pedidoMapper) {
+                             ProdutoRepository produtoRepository,
+                             PedidoMapper pedidoMapper) {
         this.clienteRepository = clienteRepository;
         this.pedidoRepository = pedidoRepository;
         this.produtoRepository = produtoRepository;
@@ -37,21 +39,31 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public List<PedidoResponseDTO> buscarPorStatus(StatusDoPedido status) {
-        return null;
+        return pedidoRepository.findByStatus(status).stream().map(pedidoMapper::toDto).toList();
     }
 
     @Override
-    public CriacaoPedidoDTO criar(CriacaoPedidoDTO pedidoDTO) {
-        Cliente cliente = clienteRepository.findByCpf(pedidoDTO.getCpfCliente()).orElseThrow(RuntimeException::new);
+    public PedidoResponseDTO criar(CriacaoPedidoDTO pedidoDTO) {
+        Cliente cliente = clienteRepository.findByCpf(pedidoDTO.getCpfCliente())
+                .orElseThrow(() -> new NegocioException(String.format("Cliente não encontrado com o cpf %s", pedidoDTO.getCpfCliente())));
         List<Produto> produtos = buscarProdutos(pedidoDTO.getIdsProdutos());
         Pedido pedido = new Pedido(cliente, produtos);
         pedidoRepository.save(pedido);
-        return null;
+        return pedidoMapper.toDto(pedido);
     }
 
     @Override
     public List<PedidoResponseDTO> buscarTodos() {
         return pedidoRepository.findAll().stream().map(pedidoMapper::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public PedidoResponseDTO mudarStatus(Long id) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("Pedido não encontrado com o id %d", id)));
+        pedido.mudarStatus();
+        pedidoRepository.save(pedido);
+        return pedidoMapper.toDto(pedido);
     }
 
     private List<Produto> buscarProdutos(List<Long> idsProdutos) {

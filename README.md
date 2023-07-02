@@ -23,58 +23,75 @@ A documentação técnica da API pode ser acessada na URI [/swagger-ui/index.htm
 
 ### Linguagem Ubíqua
 
-1. Lanchonete: Estabelecimento que oferece uma variedade de alimentos e bebidas.
-2. Cliente: Pessoa que faz um pedido na lanchonete.
-3. Pedido: Solicitação de alimentos e/ou bebidas feita por um cliente.
-4. Acompanhamento: Opção adicional selecionada pelo cliente para acompanhar seu lanche.
-5. Bebida: Opção de bebida selecionada pelo cliente.
-6. Pagamento: Processo de efetuar o pagamento do pedido.
-7. Monitor de Pedido: Tela ou dispositivo no estabelecimento que mostra o status do pedido em diferentes etapas.
-8. Status do Pedido: Indicador do progresso do pedido, dividido em:
-- a. Recebido: Pedido registrado e aguardando preparação.
-- b. Em preparação: Pedido em processo de preparação na cozinha.
-- c. Pronto: Pedido concluído e pronto para retirada.
-- d. Finalizado: Pedido entregue e finalizado.
-9. Entrega: Processo de notificar o cliente quando o pedido está pronto para retirada.
-10. Estabelecimento: Responsável pela gestão do sistema da lanchonete.
-11. Gerenciar Clientes: Funcionalidade que permite ao estabelecimento gerenciar informações dos clientes cadastrados.
-12. Gerenciar Produtos e Categorias: Funcionalidade que permite ao estabelecimento adicionar, modificar ou remover produtos e categorias do cardápio.
-13. Acompanhamento de Pedidos: Funcionalidade que permite acompanhar o status dos pedidos em andamento e estimar o tempo de espera.
+1.	Lanchonete: Estabelecimento que oferece uma variedade de alimentos e bebidas.
+2.	Cliente: Pessoa que faz um pedido na lanchonete.
+3.	Pedido: Solicitação de alimentos e/ou bebidas feita por um cliente.
+4.	Produto: Produtos que compoem um pedido
+5.	Acompanhamento: Opção adicional selecionada pelo cliente para acompanhar seu lanche.
+6.	Lanche: Alimento principal do pedido, como hamburguês, pizza, etc.
+7.	Acompanhamento: Alimento secundário do pedido, como batata frita, salada, etc.
+8.	Bebida: Opção de bebida selecionada pelo cliente.
+9.	Sobremesa: Complemento da alimentação.
+10.	Pagamento: Processo de efetuar o pagamento do pedido.
+11.	Sistema de Pedido: Tela ou dispositivo no estabelecimento que mostra o status do pedido em diferentes etapas para os clientes e para a equipe da cozinha.
+12.	Equipe da cozinha: Funcionários responsáveis por preparar os pedidos.
+13.	Status do Pedido: Indicador do progresso do pedido, dividido em:
+
+       a. Recebido: Pedido registrado e aguardando preparação.
+
+       b. Em preparação: Pedido em processo de preparação na cozinha.
+
+       c. Pronto: Pedido concluído e pronto para retirada.
+
+       d. Finalizado: Pedido entregue e finalizado.
+
+9.	Entrega: Processo de notificar o cliente quando o pedido está pronto para retirada.
+10.	Acompanhamento de Pedidos: Funcionalidade que permite acompanhar o status dos pedidos em andamento e estimar o tempo de espera.
+11.	Balcão de recolha: Local físico onde os pedidos são entregas quando finalizado para a recolha pelo cliente.
+
 
 ### Fluxo de Funcionalidades (Representação Pictográfica)
 
 ```mermaid
-graph LR
-A(Pedido) -- Selecionar --> B(Interface de Seleção)
-B -- 1. Lanche --> C(Lanche)
-B -- 2. Acompanhamento --> D(Acompanhamento)
-B -- 3. Bebida --> E(Bebida)
-B -- Pagamento --> F(Sistema de Pagamento)
-A -- Confirmar --> F
-A -- Enviar para Cozinha --> G(Monitor de Pedido)
-G -- Recebido --> H(Em Preparação)
-H -- Em Preparação --> I(Pronto)
-I -- Pronto --> J(Finalizado)
-J -- Notificar Cliente --> K(Entrega)
-K -- Retirar Pedido --> J
-L(Gerenciar Clientes) -- Admin --> M(Painel Administrativo)
-N(Gerenciar Produtos e Categorias) -- Admin --> M
-G -- Admin --> N
-Acompanhamento -- Categoria --> O(Categoria)
+flowchart LR
+
+subgraph Realização do Pedido e Pagamento
+    AA(Cliente) -- escolhe --> BB(Interface de Seleção)
+    BB -- um ou mais --> CC(Produto)
+    CC -- adiciona --> DD(Carrinho de compras)
+    DD -- finaliza --> EE(Pedido)
+    EE -- paga --> FF(Sistema terceiro de pagamento)
+end
+
+subgraph Preparação e Entrega do Pedido
+    A(Pedido) -- recebido --> B(Sistema da lanchonete)
+    B -- mostra novos pedidos--> C(Cozinheiro)
+    C -- inicia --> D(Preparacao)
+    C -- finaliza --> D(Pedido)
+    D -- enviado --> E(Balcao)
+    E -- recolhido --> F(Cliente)
+end
+
 ```
 
 #### Explicação do Fluxo:
 
-1. O cliente seleciona os itens do pedido na interface de seleção.
-2. O cliente confirma o pedido.
-3. O pedido é enviado para o sistema de pagamento integrado.
-4. Após o pagamento, o pedido é confirmado.
-5. O pedido é exibido no monitor de pedido na cozinha.
-6. O pedido passa pelas etapas de "Recebido", "Em Preparação", "Pronto" e "Finalizado".
-7. O cliente é notificado quando o pedido está pronto para retirada.
-8. O cliente retira o pedido e o status é atualizado para "Finalizado".
-9. O estabelecimento pode gerenciar os clientes cadastrados e as informações dos produtos e categorias através do painel administrativo.
-10. O estabelecimento pode acompanhar os pedidos em andamento e estimar o tempo de espera.
+Realização do pedido e pagamento:
+
+1. O cliente inicia o processo selecionando um pedido na interface de seleção.
+2. O cliente pode adicionar um lanche, um acompanhamento, uma bebida e uma sobremesa ao seu carrinho de compras.
+3. Após selecionar todos os itens desejados, o cliente avança para o sistema de pagamento.
+4. No sistema de pagamento, o cliente insere as informações de pagamento e conclui a transação. 
+ 
+Preparação e entrega do pedido:
+
+1. Após a conclusão do pagamento, o pedido é enviado para a cozinha através de um monitor de pedidos.
+2. O cozinheiro recebe a notificação de um novo pedido.
+3. O cozinheiro confirma o pedido e inicia o processo de preparação.
+4. Quando o pedido é preparado, o cozinheiro atualiza o status do pedido para 'em preparação'.
+5. Após a preparação do pedido, o cozinheiro atualiza o status para 'pronto'.
+6. O pedido é entregue ao cliente.
+7. Ao entregar o pedido, o status do pedido é atualizado para 'finalizado'.
 
 ### Arquitetura hexagonal
 

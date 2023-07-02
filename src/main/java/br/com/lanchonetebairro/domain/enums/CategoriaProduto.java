@@ -1,5 +1,7 @@
 package br.com.lanchonetebairro.domain.enums;
 
+import br.com.lanchonetebairro.domain.exceptions.BadRequestException;
+
 import java.util.Arrays;
 
 public enum CategoriaProduto {
@@ -10,6 +12,6 @@ public enum CategoriaProduto {
         return Arrays.stream(CategoriaProduto.values())
                 .filter(enumValue -> enumValue.name().equals(valor.toUpperCase()))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("CategoriaProduto não encontrado para o valor: " + valor));
+                .orElseThrow(() -> new BadRequestException(String.format("CategoriaProduto não encontrado para o valor: %s", valor)));
     }
 }

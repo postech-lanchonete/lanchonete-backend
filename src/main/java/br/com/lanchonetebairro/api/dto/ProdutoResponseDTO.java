@@ -12,7 +12,6 @@ public class ProdutoResponseDTO {
     @Schema(description = "Nome do produto.")
     private String nome;
 
-
     @Schema(description = "Categoria do produto.", enumAsRef = true)
     private CategoriaProduto categoria;
 

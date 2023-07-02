@@ -9,7 +9,8 @@ import java.util.List;
 public interface PedidoService {
 
     List<PedidoResponseDTO> buscarPorStatus(StatusDoPedido status);
-    CriacaoPedidoDTO criar(CriacaoPedidoDTO clienteDTO);
+    PedidoResponseDTO criar(CriacaoPedidoDTO clienteDTO);
     List<PedidoResponseDTO> buscarTodos();
 
+    PedidoResponseDTO mudarStatus(Long id);
 }

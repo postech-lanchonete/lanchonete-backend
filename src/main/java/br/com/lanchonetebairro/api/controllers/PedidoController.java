@@ -5,6 +5,7 @@ import br.com.lanchonetebairro.api.dto.CriacaoPedidoDTO;
 import br.com.lanchonetebairro.api.dto.PedidoResponseDTO;
 import br.com.lanchonetebairro.domain.enums.StatusDoPedido;
 import br.com.lanchonetebairro.domain.services.PedidoService;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,15 +26,23 @@ public class PedidoController implements PedidoAPI {
     }
 
     @Override
-    @GetMapping("/{statusDoPedido}")
-    public List<PedidoResponseDTO> buscarPorStatus(@PathVariable String statusDoPedido) {
-        return pedidoService.buscarPorStatus(StatusDoPedido.valueOf(statusDoPedido));
+    @GetMapping("/{status}")
+    public List<PedidoResponseDTO> buscarPorStatus(@PathVariable String status) {
+        StatusDoPedido statusDoPedido = StatusDoPedido.encontrarEnumPorString(status);
+        return pedidoService.buscarPorStatus(statusDoPedido);
     }
 
     @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CriacaoPedidoDTO criar(@RequestBody CriacaoPedidoDTO pedido) {
+    public PedidoResponseDTO criar(@RequestBody CriacaoPedidoDTO pedido) {
         return pedidoService.criar(pedido);
+    }
+
+    @Override
+    @PatchMapping("/{id}/status")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public PedidoResponseDTO mudarStatus(@PathVariable @NotNull Long id) {
+        return pedidoService.mudarStatus(id);
     }
 }

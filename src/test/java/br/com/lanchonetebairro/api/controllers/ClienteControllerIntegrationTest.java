@@ -60,7 +60,6 @@ public class ClienteControllerIntegrationTest {
 
     @Test
     public void buscarPorCPF_deveRetornarClienteExistente() throws Exception {
-        // Cadastrar um cliente de teste no banco de dados
         Cliente cliente = new Cliente();
         cliente.setNome("Cliente");
         cliente.setSobrenome("Teste");

@@ -6,10 +6,20 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class PedidoResponseDTO {
+
+    private Long id;
     private List<ProdutoResponseDTO> produtos;
     private ClienteResponseDTO cliente;
     private StatusDoPedido status;
     private LocalDateTime dataCriacao;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public List<ProdutoResponseDTO> getProdutos() {
         return produtos;

@@ -5,6 +5,7 @@ import br.com.lanchonetebairro.domain.enums.CategoriaProduto;
 import br.com.lanchonetebairro.infraestructure.entities.Produto;
 import br.com.lanchonetebairro.infraestructure.repositories.ProdutoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,12 @@ public class ProdutoControllerIntegrationTest {
     @Autowired
     private ProdutoRepository produtoRepository;
 
+    @BeforeEach
+    public void setUp() {
+        // Limpar dados de teste antes de cada execução de teste
+        produtoRepository.deleteAll();
+    }
+
     @Test
     public void buscarPorId_DeveRetornarProdutoExistente() throws Exception {
         Produto produto = criarProduto(1L, "Hambúrguer", CategoriaProduto.LANCHE, BigDecimal.valueOf(32.5),
@@ -59,14 +66,12 @@ public class ProdutoControllerIntegrationTest {
 
     @Test
     public void buscarPorId_DeveRetornar404QuandoProdutoNaoExistir() throws Exception {
-        // Executar a requisição GET para um ID inexistente
         mockMvc.perform(get("/v1/produtos/{id}", 999))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     public void buscarPorCategoria_DeveRetornarProdutosDaCategoria() throws Exception {
-        // Preparar dados de teste
         criarProduto(1L, "Hambúrguer", CategoriaProduto.LANCHE, BigDecimal.valueOf(32.5),
                 "Lorem ipsum dolor sit amet.", "");
         criarProduto(2L, "Batata Frita", CategoriaProduto.ACOMPANHAMENTO, BigDecimal.valueOf(15.0),
@@ -158,14 +163,12 @@ public class ProdutoControllerIntegrationTest {
 
     @Test
     public void editar_DeveRetornarProdutoEditado() throws Exception {
-        // Preparar dados de teste
         Produto produto = criarProduto(1L, "Hambúrguer", CategoriaProduto.LANCHE, BigDecimal.valueOf(32.5),
                 "Lorem ipsum dolor sit amet.", "");
 
         CriacaoProdutoDTO dto = new CriacaoProdutoDTO();
         dto.setNome("XXX");
 
-        // Executar a requisição PUT
         mockMvc.perform(put("/v1/produtos/{id}", produto.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
@@ -177,7 +180,6 @@ public class ProdutoControllerIntegrationTest {
                 .andExpect(jsonPath("$.descricao", is(produto.getDescricao())))
                 .andExpect(jsonPath("$.imagem", is(produto.getImagem())));
 
-        // Verificar se o produto foi atualizado no banco de dados
         Produto produtoAtualizado = produtoRepository.findById(produto.getId()).orElse(null);
         assertThat(produtoAtualizado).isNotNull();
         assertThat(produtoAtualizado.getNome()).isEqualTo(dto.getNome());

@@ -1,5 +1,7 @@
 package br.com.lanchonetebairro.api.handler;
 
+import br.com.lanchonetebairro.domain.exceptions.BadRequestException;
+import br.com.lanchonetebairro.domain.exceptions.NegocioException;
 import br.com.lanchonetebairro.domain.exceptions.NotFoundException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -13,9 +15,19 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler(NegocioException.class)
+    public final ResponseEntity<ExceptionResponse> handleTo(NegocioException e) {
+        return new ResponseEntity<>(new ExceptionResponse(ErrorType.PROCESS_FAILURE,
+                e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+    @ExceptionHandler(BadRequestException.class)
+    public final ResponseEntity<ExceptionResponse> handleTo(BadRequestException e) {
+        return new ResponseEntity<>(new ExceptionResponse(ErrorType.VALIDATION_FAILURE,
+                e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
     @ExceptionHandler(NotFoundException.class)
-    public final ResponseEntity<ExceptionResponse> handleNotFoundException(NotFoundException e) {
-        return new ResponseEntity<>(new ExceptionResponse(ErrorType.GENERIC_SERVER_ERROR,
+    public final ResponseEntity<ExceptionResponse> handleTo(NotFoundException e) {
+        return new ResponseEntity<>(new ExceptionResponse(ErrorType.RESOURCE_NOT_FOUND,
                 e.getMessage()), HttpStatus.NOT_FOUND);
     }
 

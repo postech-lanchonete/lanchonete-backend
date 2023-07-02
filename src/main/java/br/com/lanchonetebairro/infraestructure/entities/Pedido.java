@@ -1,7 +1,10 @@
 package br.com.lanchonetebairro.infraestructure.entities;
 
 import br.com.lanchonetebairro.domain.enums.StatusDoPedido;
+import br.com.lanchonetebairro.domain.exceptions.NegocioException;
 import jakarta.persistence.*;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,19 +27,41 @@ public class Pedido {
     private List<Produto> produtos;
 
     @Enumerated(EnumType.STRING)
-    private StatusDoPedido statusDoPedido;
+    private StatusDoPedido status;
 
     private LocalDateTime dataCriacao;
 
     public Pedido(Cliente cliente, List<Produto> produtos) {
-        this.statusDoPedido = StatusDoPedido.RECEBIDO;
+        this.status = StatusDoPedido.RECEBIDO;
         this.dataCriacao = LocalDateTime.now();
         this.cliente = cliente;
         this.produtos = produtos;
+        validarPedido();
+    }
+
+    private void validarPedido() {
+        if (ObjectUtils.isEmpty(cliente)) {
+            throw new NegocioException("Cliente não pode ser vazio ao criar um novo pedido");
+        }
+        if (CollectionUtils.isEmpty(produtos)) {
+            throw new NegocioException("Deve ser informado ao menos um produto válido para criar um pedido");
+        }
     }
 
     public Pedido() {
+        this.status = StatusDoPedido.RECEBIDO;
+        this.dataCriacao = LocalDateTime.now();
+    }
 
+    public void mudarStatus() {
+        switch (this.status) {
+            case RECEBIDO -> this.status = StatusDoPedido.EM_PREPARACAO;
+            case EM_PREPARACAO -> this.status = StatusDoPedido.PRONTO;
+            case PRONTO -> this.status = StatusDoPedido.FINALIZADO;
+            default -> {
+                // Manter o status em FINALIZADO
+            }
+        }
     }
 
     public Long getId() {
@@ -59,12 +84,12 @@ public class Pedido {
         this.produtos = produtos;
     }
 
-    public StatusDoPedido getStatusDoPedido() {
-        return statusDoPedido;
+    public StatusDoPedido getStatus() {
+        return status;
     }
 
-    public void setStatusDoPedido(StatusDoPedido statusDoPedido) {
-        this.statusDoPedido = statusDoPedido;
+    public void setStatus(StatusDoPedido statusDoPedido) {
+        this.status = statusDoPedido;
     }
 
     public LocalDateTime getDataCriacao() {
