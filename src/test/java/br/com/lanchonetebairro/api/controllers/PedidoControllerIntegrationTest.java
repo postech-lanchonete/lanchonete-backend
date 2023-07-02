@@ -1,14 +1,14 @@
 package br.com.lanchonetebairro.api.controllers;
 
-import br.com.lanchonetebairro.api.dto.CriacaoPedidoDTO;
-import br.com.lanchonetebairro.domain.enums.CategoriaProduto;
-import br.com.lanchonetebairro.domain.enums.StatusDoPedido;
-import br.com.lanchonetebairro.infraestructure.entities.Cliente;
-import br.com.lanchonetebairro.infraestructure.entities.Pedido;
-import br.com.lanchonetebairro.infraestructure.entities.Produto;
-import br.com.lanchonetebairro.infraestructure.repositories.ClienteRepository;
-import br.com.lanchonetebairro.infraestructure.repositories.PedidoRepository;
-import br.com.lanchonetebairro.infraestructure.repositories.ProdutoRepository;
+import br.com.lanchonetebairro.adapter.driver.api.dto.CriacaoPedidoDTO;
+import br.com.lanchonetebairro.core.domain.enums.CategoriaProduto;
+import br.com.lanchonetebairro.core.domain.enums.StatusDoPedido;
+import br.com.lanchonetebairro.core.domain.entities.Cliente;
+import br.com.lanchonetebairro.core.domain.entities.Pedido;
+import br.com.lanchonetebairro.core.domain.entities.Produto;
+import br.com.lanchonetebairro.adapter.driven.infraestructure.repositories.ClienteRepository;
+import br.com.lanchonetebairro.adapter.driven.infraestructure.repositories.PedidoRepository;
+import br.com.lanchonetebairro.adapter.driven.infraestructure.repositories.ProdutoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -131,7 +131,7 @@ public class PedidoControllerIntegrationTest {
         String cpf = "123456789";
         criarProduto("Hambúrguer", CategoriaProduto.LANCHE, BigDecimal.valueOf(32.5));
         criarProduto("Batata Frita", CategoriaProduto.ACOMPANHAMENTO, BigDecimal.valueOf(15.0));
-        Cliente cliente = criarCliente(cpf);
+        criarCliente(cpf);
 
         CriacaoPedidoDTO pedidoDTO = new CriacaoPedidoDTO();
         pedidoDTO.setCpfCliente(cpf);

@@ -37,13 +37,10 @@ A documentação técnica da API pode ser acessada na URI [/swagger-ui/index.htm
 12.	Equipe da cozinha: Funcionários responsáveis por preparar os pedidos.
 13.	Status do Pedido: Indicador do progresso do pedido, dividido em:
 
-       a. Recebido: Pedido registrado e aguardando preparação.
-
-       b. Em preparação: Pedido em processo de preparação na cozinha.
-
-       c. Pronto: Pedido concluído e pronto para retirada.
-
-       d. Finalizado: Pedido entregue e finalizado.
+       - a. Recebido: Pedido registrado e aguardando preparação.
+       - b. Em preparação: Pedido em processo de preparação na cozinha.
+       - c. Pronto: Pedido concluído e pronto para retirada.
+       - d. Finalizado: Pedido entregue e finalizado.
 
 9.	Entrega: Processo de notificar o cliente quando o pedido está pronto para retirada.
 10.	Acompanhamento de Pedidos: Funcionalidade que permite acompanhar o status dos pedidos em andamento e estimar o tempo de espera.
@@ -101,12 +98,25 @@ A principal razão para utilizar a arquitetura hexagonal foi sua capacidade de i
 
 Além disso, também proporciona flexibilidade e adaptabilidade ao sistema. Ao definir as interfaces externas como portas de entrada e saída, é possível substituir ou adicionar adaptadores para conectar-se a diferentes tecnologias ou serviços externos, sem afetar o núcleo da aplicação. Isso torna o sistema mais preparado para lidar com mudanças de requisitos e tecnologias.
 
+### Verificação de integridade (Health Check)
+
+O Health Check é um mecanismo que permite verificar o estado de saúde de um sistema ou serviço em tempo real. Ele é usado para monitorar e validar se o sistema está funcionando corretamente, fornecendo informações sobre sua disponibilidade e desempenho.
+
+No contexto deste projeto, o Health Check foi implementado para garantir a integridade e a estabilidade do sistema. Ele permite que os administradores ou ferramentas de monitoramento verifiquem a saúde da aplicação de forma automatizada. O projeto utiliza o Health Check para fornecer um endpoint específico, '/actuator/health', que retorna informações sobre o estado do sistema, incluindo o status atual. Isso é útil para identificar problemas e tomar ações corretivas, garantindo a disponibilidade e a qualidade do serviço. Ao utilizar o Health Check, o projeto busca facilitar o monitoramento e o diagnóstico de problemas, contribuindo para uma melhor experiência do usuário e um ambiente mais confiável.
+
+Alguns endpoints úteis:
+
+- [/actuator/health](http://localhost:8080/actuator/health): Informações de saúde da aplicação, incluindo o status do banco de dados.
+- [/actuator/info](http://localhost:8080/actuator/health): Informações gerais sobre a aplicação, incluindo informações sobre o banco de dados.
+- [/actuator/metrics](http://localhost:8080/actuator/health): Métricas da aplicação, como tempo de execução de consultas no banco de dados.
+
+
 ### Como rodar o projeto
 
 #### Prerequisitos
-- [ ] Docker instalado e rodando
-- [ ] Gradle instalado
-- [ ] Java 17
+- [x] Docker instalado e rodando
+- [x] Gradle instalado
+- [x] Java 17
 
 #### Comandos
 Uma vez dentro da raiz do projeto rode o seguinte comando em um terminal

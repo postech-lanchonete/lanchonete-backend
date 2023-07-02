@@ -1,9 +1,9 @@
 package br.com.lanchonetebairro.api.controllers;
 
-import br.com.lanchonetebairro.api.dto.CriacaoProdutoDTO;
-import br.com.lanchonetebairro.domain.enums.CategoriaProduto;
-import br.com.lanchonetebairro.infraestructure.entities.Produto;
-import br.com.lanchonetebairro.infraestructure.repositories.ProdutoRepository;
+import br.com.lanchonetebairro.adapter.driver.api.dto.CriacaoProdutoDTO;
+import br.com.lanchonetebairro.core.domain.enums.CategoriaProduto;
+import br.com.lanchonetebairro.core.domain.entities.Produto;
+import br.com.lanchonetebairro.adapter.driven.infraestructure.repositories.ProdutoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,8 +51,8 @@ public class ProdutoControllerIntegrationTest {
 
     @Test
     public void buscarPorId_DeveRetornarProdutoExistente() throws Exception {
-        Produto produto = criarProduto(1L, "Hambúrguer", CategoriaProduto.LANCHE, BigDecimal.valueOf(32.5),
-                "Lorem ipsum dolor sit amet.", "");
+        Produto produto = criarProduto(1L, "Hambúrguer", CategoriaProduto.LANCHE, BigDecimal.valueOf(32.5)
+        );
 
         mockMvc.perform(get("/v1/produtos/{id}", produto.getId()))
                 .andExpect(status().isOk())
@@ -72,10 +72,10 @@ public class ProdutoControllerIntegrationTest {
 
     @Test
     public void buscarPorCategoria_DeveRetornarProdutosDaCategoria() throws Exception {
-        criarProduto(1L, "Hambúrguer", CategoriaProduto.LANCHE, BigDecimal.valueOf(32.5),
-                "Lorem ipsum dolor sit amet.", "");
-        criarProduto(2L, "Batata Frita", CategoriaProduto.ACOMPANHAMENTO, BigDecimal.valueOf(15.0),
-                "Lorem ipsum dolor sit amet.", "");
+        criarProduto(1L, "Hambúrguer", CategoriaProduto.LANCHE, BigDecimal.valueOf(32.5)
+        );
+        criarProduto(2L, "Batata Frita", CategoriaProduto.ACOMPANHAMENTO, BigDecimal.valueOf(15.0)
+        );
 
         mockMvc.perform(get("/v1/produtos/categoria/{categoria}", "LANCHE"))
                 .andExpect(status().isOk())
@@ -163,8 +163,8 @@ public class ProdutoControllerIntegrationTest {
 
     @Test
     public void editar_DeveRetornarProdutoEditado() throws Exception {
-        Produto produto = criarProduto(1L, "Hambúrguer", CategoriaProduto.LANCHE, BigDecimal.valueOf(32.5),
-                "Lorem ipsum dolor sit amet.", "");
+        Produto produto = criarProduto(1L, "Hambúrguer", CategoriaProduto.LANCHE, BigDecimal.valueOf(32.5)
+        );
 
         CriacaoProdutoDTO dto = new CriacaoProdutoDTO();
         dto.setNome("XXX");
@@ -200,14 +200,14 @@ public class ProdutoControllerIntegrationTest {
                 .andExpect(status().isNotFound());
     }
 
-    private Produto criarProduto(Long id, String nome, CategoriaProduto categoria, BigDecimal preco, String descricao, String imagem) {
+    private Produto criarProduto(Long id, String nome, CategoriaProduto categoria, BigDecimal preco) {
         Produto produto = new Produto();
         produto.setId(id);
         produto.setNome(nome);
         produto.setCategoria(categoria);
         produto.setPreco(preco);
-        produto.setDescricao(descricao);
-        produto.setImagem(imagem);
+        produto.setDescricao("Lorem ipsum dolor sit amet.");
+        produto.setImagem("");
         return produtoRepository.save(produto);
     }
 
