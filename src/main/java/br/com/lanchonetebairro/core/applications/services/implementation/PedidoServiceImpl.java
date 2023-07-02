@@ -1,6 +1,6 @@
 package br.com.lanchonetebairro.core.applications.services.implementation;
 
-import br.com.lanchonetebairro.adapter.driven.infraestructure.repositories.PedidoRepository;
+import br.com.lanchonetebairro.adapter.driven.infrastructure.repositories.PedidoRepository;
 import br.com.lanchonetebairro.core.applications.exceptions.NotFoundException;
 import br.com.lanchonetebairro.core.applications.services.PedidoService;
 import br.com.lanchonetebairro.core.domain.entities.Pedido;

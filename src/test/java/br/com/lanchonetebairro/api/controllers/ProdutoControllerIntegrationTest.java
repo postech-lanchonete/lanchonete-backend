@@ -3,7 +3,7 @@ package br.com.lanchonetebairro.api.controllers;
 import br.com.lanchonetebairro.adapter.driver.api.dto.CriacaoProdutoDTO;
 import br.com.lanchonetebairro.core.domain.enums.CategoriaProduto;
 import br.com.lanchonetebairro.core.domain.entities.Produto;
-import br.com.lanchonetebairro.adapter.driven.infraestructure.repositories.ProdutoRepository;
+import br.com.lanchonetebairro.adapter.driven.infrastructure.repositories.ProdutoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

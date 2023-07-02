@@ -1,4 +1,4 @@
-package br.com.lanchonetebairro.adapter.driven.infraestructure.repositories;
+package br.com.lanchonetebairro.adapter.driven.infrastructure.repositories;
 
 import br.com.lanchonetebairro.core.domain.enums.StatusDoPedido;
 import br.com.lanchonetebairro.core.domain.entities.Pedido;

@@ -1,6 +1,6 @@
 package br.com.lanchonetebairro.core.applications.services.implementation;
 
-import br.com.lanchonetebairro.adapter.driven.infraestructure.repositories.ProdutoRepository;
+import br.com.lanchonetebairro.adapter.driven.infrastructure.repositories.ProdutoRepository;
 import br.com.lanchonetebairro.core.applications.exceptions.NotFoundException;
 import br.com.lanchonetebairro.core.applications.services.ProdutoService;
 import br.com.lanchonetebairro.core.domain.entities.Produto;
