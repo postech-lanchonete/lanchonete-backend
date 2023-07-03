@@ -1,10 +1,15 @@
-FROM mariadb:latest
+FROM openjdk:17-jdk-slim AS builder
 
-# Variáveis de ambiente do MariaDB
-ENV MYSQL_ROOT_PASSWORD=senha
+WORKDIR /app
 
-# Copia o arquivo init.sql para o diretório de inicialização do banco de dados
-COPY init.sql /docker-entrypoint-initdb.d/
+COPY . .
 
-# Configuração de rede
-EXPOSE 3306
+RUN ./gradlew build
+
+FROM openjdk:17-oracle
+
+WORKDIR /app
+
+COPY --from=builder /app/build/libs/lanchonetebairro-1.0.0-POC.jar .
+
+CMD ["java", "-jar", "lanchonetebairro-1.0.0-POC.jar"]
