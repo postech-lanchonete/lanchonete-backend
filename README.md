@@ -35,7 +35,7 @@ A documentação técnica da API pode ser acessada na URI [/swagger-ui/index.htm
 Uma vez dentro da raiz do projeto rode o seguinte comando em um terminal
 
 ```
- docker build -t lanchonete-do-bairro-image .
- docker run -d --name lanchonete-do-bairro-container -p 3306:3306 lanchonete-do-bairro-image 
- ./gradlew bootRun
+ docker-compose up
 ```
+
+Este comando faz uso do Dockerfile da raiz do projeto, que realiza um build do jar da aplicação e sobe uma instância do banco de dados MariaDB. Assim que o comando rodar, basta acessar a url do [swagger](http://localhost:8080/swagger-ui/index.html) para fazer uso do projeto.
