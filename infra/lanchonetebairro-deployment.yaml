@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-lanchonetebairro
+  labels:
+    app: deployment-lanchonetebairro
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: deployment-lanchonetebairro
+  template:
+    metadata:
+      labels:
+        app: deployment-lanchonetebairro
+    spec:
+      containers:
+        - name: container-deployment-lanchonetebairro
+          image: danielmaria/lanchonetebairro-app:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MYSQL_ROOT_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: db-configmap
+                  key: MYSQL_ROOT_USERNAME
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: db-configmap
+                  key: MYSQL_ROOT_PASSWORD
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config
+              readOnly: true
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 60
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 60
+          startupProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            failureThreshold: 3
+            periodSeconds: 60
+            initialDelaySeconds: 10
+          resources:
+            requests:
+              cpu: 1m
+      volumes:
+        - name: config-volume
+          configMap:
+            name: db-configmap
+  selector:
+    matchLabels:
+      app: deployment-lanchonetebairro
