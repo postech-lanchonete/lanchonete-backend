@@ -3,7 +3,7 @@
 
 ##### versão 1.0.0-POC
 
-[<img src="https://img.shields.io/badge/dockerhub-images-blue.svg?logo=docker">](https://hub.docker.com/repository/docker/danielmaria/lanchonetebairro-app/general) [<img src="https://img.shields.io/badge/Java-17-important.svg?logo=java">](https://hub.docker.com/repository/docker/danielmaria/lanchonetebairro-app/general) [<img src="https://img.shields.io/badge/Build Tool-Gradle-green.svg?logo=gradle">](https://hub.docker.com/repository/docker/danielmaria/lanchonetebairro-app/general) [<img src="https://img.shields.io/badge/Orchestrated by-Kubernetes-green.svg?logo=kubernetes">](https://hub.docker.com/repository/docker/danielmaria/lanchonetebairro-app/general) 
+ <img src="https://img.shields.io/badge/Java-17-important.svg?logo=java"> <img src="https://img.shields.io/badge/Build Tool-Gradle-green.svg?logo=gradle"> [<img src="https://img.shields.io/badge/dockerhub-images-blue.svg?logo=docker">](https://hub.docker.com/repository/docker/danielmaria/lanchonetebairro-app/general) <img src="https://img.shields.io/badge/Orchestrated by-Kubernetes-green.svg?logo=kubernetes">
 
 Toda a documentação geral pode ser encontrada nesta página do [Notion](https://danielmariadasilva.notion.site/Lanchonete-do-Bairro-97145985ac3e4b65a077ff13866e66ad), assim como as versōes posteriores.
 
