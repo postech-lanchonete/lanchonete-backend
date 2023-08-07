@@ -38,21 +38,21 @@ spec:
             httpGet:
               path: /actuator/health/readiness
               port: 8080
-            initialDelaySeconds: 20
-            periodSeconds: 60
+            initialDelaySeconds: 5
+            periodSeconds: 10
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
               port: 8080
-            initialDelaySeconds: 20
-            periodSeconds: 60
+            initialDelaySeconds: 5
+            periodSeconds: 10
           startupProbe:
             httpGet:
               path: /actuator/health
               port: 8080
             failureThreshold: 3
-            periodSeconds: 60
-            initialDelaySeconds: 10
+            periodSeconds: 10
+            initialDelaySeconds: 5
           resources:
             requests:
               cpu: 1m
@@ -60,6 +60,3 @@ spec:
         - name: config-volume
           configMap:
             name: db-configmap
-  selector:
-    matchLabels:
-      app: deployment-lanchonetebairro
