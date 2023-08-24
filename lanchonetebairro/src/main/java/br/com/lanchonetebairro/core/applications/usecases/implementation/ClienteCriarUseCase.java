@@ -2,44 +2,27 @@ package br.com.lanchonetebairro.core.applications.usecases.implementation;
 
 import br.com.lanchonetebairro.adapter.driver.api.dto.ClienteResponseDTO;
 import br.com.lanchonetebairro.adapter.driver.api.dto.CriacaoClienteDTO;
-import br.com.lanchonetebairro.adapter.driver.api.dto.CriacaoProdutoDTO;
 import br.com.lanchonetebairro.core.applications.exceptions.NotFoundException;
 import br.com.lanchonetebairro.core.applications.mappers.ClienteMapper;
 import br.com.lanchonetebairro.core.applications.services.ClienteService;
-import br.com.lanchonetebairro.core.applications.usecases.ClienteUseCase;
+import br.com.lanchonetebairro.core.applications.usecases.UseCase;
 import br.com.lanchonetebairro.core.domain.entities.Cliente;
-import br.com.lanchonetebairro.core.domain.entities.Produto;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Example;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Deprecated
-@Service
-public class ClienteUseCaseImpl implements ClienteUseCase {
+@Component
+public class ClienteCriarUseCase implements UseCase<CriacaoClienteDTO, ClienteResponseDTO> {
 
     private final ClienteService clienteService;
     private final ClienteMapper clienteMapper;
 
-    public ClienteUseCaseImpl(ClienteService clienteService, ClienteMapper clienteMapper) {
+    public ClienteCriarUseCase(ClienteService clienteService, ClienteMapper clienteMapper) {
         this.clienteService = clienteService;
         this.clienteMapper = clienteMapper;
     }
-
-    @Deprecated
     @Override
-    public ClienteResponseDTO buscarPorCPF(String cpf) {
-        Cliente clienteExample = new Cliente();
-        clienteExample.setCpf(cpf);
-        Cliente cliente = clienteService.buscarPor(Example.of(clienteExample))
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new NotFoundException(String.format("Cliente não encontrado com o cpf %s", cpf)));
-        return clienteMapper.toDto(cliente);
-    }
-
-    @Deprecated
-    @Override
-    public ClienteResponseDTO criar(CriacaoClienteDTO clienteDTO) {
+    public ClienteResponseDTO realizar(CriacaoClienteDTO clienteDTO) {
         Cliente cliente = clienteMapper.toEntity(clienteDTO);
         this.procurarPorDuplicidade(clienteDTO);
         try {

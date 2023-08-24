@@ -13,9 +13,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
+@RequestMapping("/v1/pedidos")
 @Tag(name = "Pedidos", description = "Todas as operações referentes aos pedidos")
 public interface PedidoAPI {
 
@@ -44,7 +46,7 @@ public interface PedidoAPI {
             }),
             @ApiResponse(responseCode = "400", description = "O status solicitado não existe.", content = { @Content(schema = @Schema()) })
     })
-    List<PedidoResponseDTO> buscarPorStatus(@Parameter(description = "Status do pedido.", required = true) String statusDoPedido);
+    List<PedidoResponseDTO> buscarPorStatus(@Parameter(description = "Status do pedido, podendo ser: RECEBIDO, EM_PREPARACAO, PRONTO ou FINALIZADO", required = true) String statusDoPedido);
 
     @Operation(
             summary = "Cria um novo pedido",

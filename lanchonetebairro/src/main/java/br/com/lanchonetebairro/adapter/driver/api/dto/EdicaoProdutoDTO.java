@@ -8,6 +8,9 @@ import java.math.BigDecimal;
 @Schema(description = "Objeto de edição de dados para produto")
 public class EdicaoProdutoDTO {
 
+    @Schema(description = "Id do produto", hidden = true)
+    private Long id;
+
     @Schema(description = "Nome do produto")
     private String nome;
     @Schema(description = "Categoria do produto.", enumAsRef = true)
@@ -22,6 +25,13 @@ public class EdicaoProdutoDTO {
     @Schema(description = "Imagem do produto em BLOB")
     private String imagem;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getNome() {
         return nome;

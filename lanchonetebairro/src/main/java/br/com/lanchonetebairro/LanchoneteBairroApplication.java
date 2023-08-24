@@ -18,7 +18,7 @@ public class LanchoneteBairroApplication {
 	public OpenAPI customOpenAPI() {
 		return new OpenAPI()
 				.components(new Components())
-				.info(new Info().title("Lancheria Bairro")
-				.version("1.0.0-POC.01"));
+				.info(new Info().title("Lanchonete do Bairro")
+				.version("1.0.0-POC.02"));
 	}
 }

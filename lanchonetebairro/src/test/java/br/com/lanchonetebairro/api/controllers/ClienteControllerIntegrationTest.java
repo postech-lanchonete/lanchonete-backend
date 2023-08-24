@@ -59,6 +59,47 @@ public class ClienteControllerIntegrationTest {
     }
 
     @Test
+    public void criarCliente_deveRetornar422_AoInserirClienteComEmailJaCadastrado() throws Exception {
+        Cliente cliente = new Cliente();
+        cliente.setEmail("teste.teste@test.com");
+        clienteRepository.save(cliente);
+
+        CriacaoClienteDTO criacaoClienteDTO = new CriacaoClienteDTO();
+        criacaoClienteDTO.setNome("Cliente");
+        criacaoClienteDTO.setSobrenome("Teste");
+        criacaoClienteDTO.setEmail("teste.teste@test.com");
+        criacaoClienteDTO.setCpf("1234567891");
+        criacaoClienteDTO.setSenha("123456798");
+
+        mockMvc.perform(post("/v1/clientes")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(criacaoClienteDTO)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+
+    @Test
+    public void criarCliente_deveRetornar422_AoInserirClienteComNomeSobrenomeCPFJaCadastrado() throws Exception {
+        Cliente cliente = new Cliente();
+        cliente.setNome("Cliente");
+        cliente.setSobrenome("Teste");
+        cliente.setCpf("1234567891");
+        clienteRepository.save(cliente);
+
+        CriacaoClienteDTO criacaoClienteDTO = new CriacaoClienteDTO();
+        criacaoClienteDTO.setNome("Cliente");
+        criacaoClienteDTO.setSobrenome("Teste");
+        criacaoClienteDTO.setEmail("teste.teste@test.com");
+        criacaoClienteDTO.setCpf("1234567891");
+        criacaoClienteDTO.setSenha("123456798");
+
+        mockMvc.perform(post("/v1/clientes")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(criacaoClienteDTO)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
     public void buscarPorCPF_deveRetornarClienteExistente() throws Exception {
         Cliente cliente = new Cliente();
         cliente.setNome("Cliente");

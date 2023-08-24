@@ -14,6 +14,8 @@ public interface ProdutoMapper {
     @Mapping(target = "id", ignore = true)
     Produto toEntity(CriacaoProdutoDTO dto);
 
+    Produto toEntity(ProdutoResponseDTO dto);
+
     default void updateNonNullFields(EdicaoProdutoDTO dto, @MappingTarget Produto entity) {
         if (dto.getNome() != null) {
             entity.setNome(dto.getNome());

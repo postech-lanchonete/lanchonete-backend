@@ -31,6 +31,8 @@ kubectl apply -f lanchonetebairro-svc.yaml
 kubectl apply -f lanchonetebairro-deployment.yaml
 kubectl apply -f lanchonetebairro-hpa.yaml
 kubectl get pods --watch
+
+minikube service svc-lanchonetebairro-replica --url
 ```
 
 Este comando irá subir toda a infraestrutura do Kubernetes, que pode ser visualizada na documentação geral, e a aplição estará rodando na porta 31001.

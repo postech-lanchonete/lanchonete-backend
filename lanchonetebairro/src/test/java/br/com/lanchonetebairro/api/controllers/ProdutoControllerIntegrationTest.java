@@ -162,9 +162,27 @@ public class ProdutoControllerIntegrationTest {
     }
 
     @Test
+    public void criar_DeveRetornar422_AoInserirProdutoComMesmoNomeJaExistente() throws Exception {
+        Produto produto = new Produto();
+        produto.setNome("Hambúrguer");
+        produtoRepository.save(produto);
+
+        CriacaoProdutoDTO dto = new CriacaoProdutoDTO();
+        dto.setNome("Hambúrguer");
+        dto.setCategoria(CategoriaProduto.LANCHE);
+        dto.setDescricao("Lorem ipsum dolor sit amet.");
+        dto.setImagem("");
+        dto.setPreco(BigDecimal.ONE);
+
+        mockMvc.perform(post("/v1/produtos")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
     public void editar_DeveRetornarProdutoEditado() throws Exception {
-        Produto produto = criarProduto(1L, "Hambúrguer", CategoriaProduto.LANCHE, BigDecimal.valueOf(32.5)
-        );
+        Produto produto = criarProduto(1L, "Hambúrguer", CategoriaProduto.LANCHE, BigDecimal.valueOf(32.5));
 
         CriacaoProdutoDTO dto = new CriacaoProdutoDTO();
         dto.setNome("XXX");

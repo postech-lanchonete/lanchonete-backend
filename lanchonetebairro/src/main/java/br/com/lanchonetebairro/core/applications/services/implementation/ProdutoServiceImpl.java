@@ -5,6 +5,7 @@ import br.com.lanchonetebairro.core.applications.exceptions.NotFoundException;
 import br.com.lanchonetebairro.core.applications.services.ProdutoService;
 import br.com.lanchonetebairro.core.domain.entities.Produto;
 import br.com.lanchonetebairro.core.domain.enums.CategoriaProduto;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +31,13 @@ public class ProdutoServiceImpl implements ProdutoService {
 
     @Override
     public List<Produto> buscarPorCategoria(CategoriaProduto categoria) {
-        return produtoRepository.findByCategoria(categoria);
+        Produto produtoExample = new Produto();
+        produtoExample.setCategoria(categoria);
+        return produtoRepository.findAll(Example.of(produtoExample));
+    }
+
+    @Override
+    public List<Produto> buscarPor(Example<Produto> produtoExample) {
+        return produtoRepository.findAll(produtoExample);
     }
 }

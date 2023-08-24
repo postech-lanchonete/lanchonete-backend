@@ -6,4 +6,3 @@ metadata:
     description: "Configmap para o banco de dados do projeto lanchonetebairro"
 data:
   MYSQL_ROOT_USERNAME: "root"
-  MYSQL_ROOT_PASSWORD: "senha"
