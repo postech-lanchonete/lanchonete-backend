@@ -1,9 +1,9 @@
 package br.com.lanchonetebairro.api.controllers;
 
-import br.com.lanchonetebairro.adapter.driver.api.dto.CriacaoProdutoDTO;
-import br.com.lanchonetebairro.core.domain.enums.CategoriaProduto;
-import br.com.lanchonetebairro.core.domain.entities.Produto;
 import br.com.lanchonetebairro.adapter.driven.infrastructure.repositories.ProdutoRepository;
+import br.com.lanchonetebairro.adapter.driver.api.dto.CriacaoProdutoDTO;
+import br.com.lanchonetebairro.core.domain.entities.Produto;
+import br.com.lanchonetebairro.core.domain.enums.CategoriaProduto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,9 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

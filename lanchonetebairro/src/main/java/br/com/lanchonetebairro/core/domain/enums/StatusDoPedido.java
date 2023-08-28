@@ -3,7 +3,6 @@ package br.com.lanchonetebairro.core.domain.enums;
 import br.com.lanchonetebairro.core.applications.exceptions.BadRequestException;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public enum StatusDoPedido {

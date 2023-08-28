@@ -1,6 +1,5 @@
 package br.com.lanchonetebairro.core.applications.services;
 
-import br.com.lanchonetebairro.adapter.driver.api.dto.PedidoResponseDTO;
 import br.com.lanchonetebairro.core.domain.entities.Pedido;
 import br.com.lanchonetebairro.core.domain.enums.StatusDoPedido;
 

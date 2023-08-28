@@ -1,7 +1,6 @@
-package br.com.lanchonetebairro.core.applications.usecases.implementation;
+package br.com.lanchonetebairro.core.applications.usecases.implementation.pedido;
 
 import br.com.lanchonetebairro.adapter.driver.api.dto.PedidoResponseDTO;
-import br.com.lanchonetebairro.adapter.driver.api.dto.ProdutoResponseDTO;
 import br.com.lanchonetebairro.core.applications.mappers.PedidoMapper;
 import br.com.lanchonetebairro.core.applications.services.PedidoService;
 import br.com.lanchonetebairro.core.applications.usecases.UseCase;

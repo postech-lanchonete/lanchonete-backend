@@ -1,7 +1,12 @@
 package br.com.lanchonetebairro.core.domain.entities;
 
 import br.com.lanchonetebairro.core.domain.enums.CategoriaProduto;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
 

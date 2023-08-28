@@ -1,4 +1,4 @@
-package br.com.lanchonetebairro.core.applications.usecases.implementation;
+package br.com.lanchonetebairro.core.applications.usecases.implementation.pedido;
 
 import br.com.lanchonetebairro.adapter.driven.api.notificacao.NotificacaoEmailPort;
 import br.com.lanchonetebairro.adapter.driver.api.dto.PedidoResponseDTO;

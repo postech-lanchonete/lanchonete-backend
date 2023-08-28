@@ -1,4 +1,4 @@
-package br.com.lanchonetebairro.core.applications.usecases.implementation;
+package br.com.lanchonetebairro.core.applications.usecases.implementation.pedido;
 
 import br.com.lanchonetebairro.adapter.driven.api.pagamento.PagamentoPort;
 import br.com.lanchonetebairro.adapter.driver.api.dto.CriacaoPedidoDTO;
@@ -7,6 +7,8 @@ import br.com.lanchonetebairro.core.applications.mappers.PedidoMapper;
 import br.com.lanchonetebairro.core.applications.mappers.ProdutoMapper;
 import br.com.lanchonetebairro.core.applications.services.PedidoService;
 import br.com.lanchonetebairro.core.applications.usecases.UseCase;
+import br.com.lanchonetebairro.core.applications.usecases.implementation.produto.ProdutoBuscarPorIdUseCase;
+import br.com.lanchonetebairro.core.applications.usecases.implementation.cliente.ClienteBuscarPorCpfUseCase;
 import br.com.lanchonetebairro.core.domain.entities.Cliente;
 import br.com.lanchonetebairro.core.domain.entities.Pedido;
 import br.com.lanchonetebairro.core.domain.entities.Produto;

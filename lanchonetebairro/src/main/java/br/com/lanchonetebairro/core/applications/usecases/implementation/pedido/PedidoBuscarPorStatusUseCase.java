@@ -1,4 +1,4 @@
-package br.com.lanchonetebairro.core.applications.usecases.implementation;
+package br.com.lanchonetebairro.core.applications.usecases.implementation.pedido;
 
 import br.com.lanchonetebairro.adapter.driver.api.dto.PedidoResponseDTO;
 import br.com.lanchonetebairro.core.applications.mappers.PedidoMapper;
@@ -8,7 +8,6 @@ import br.com.lanchonetebairro.core.domain.enums.StatusDoPedido;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class PedidoBuscarPorStatusUseCase implements UseCase<StatusDoPedido, List<PedidoResponseDTO>> {

@@ -3,7 +3,6 @@ package br.com.lanchonetebairro.core.applications.services;
 import br.com.lanchonetebairro.core.domain.entities.Cliente;
 import org.springframework.data.domain.Example;
 
-import java.util.Arrays;
 import java.util.List;
 
 public interface ClienteService {

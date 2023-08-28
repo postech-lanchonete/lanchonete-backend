@@ -1,8 +1,18 @@
 package br.com.lanchonetebairro.core.domain.entities;
 
-import br.com.lanchonetebairro.core.domain.enums.StatusDoPedido;
 import br.com.lanchonetebairro.core.applications.exceptions.NegocioException;
-import jakarta.persistence.*;
+import br.com.lanchonetebairro.core.domain.enums.StatusDoPedido;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 

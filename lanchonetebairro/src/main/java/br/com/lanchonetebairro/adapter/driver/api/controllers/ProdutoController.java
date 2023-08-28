@@ -4,14 +4,20 @@ import br.com.lanchonetebairro.adapter.driver.api.ProdutoAPI;
 import br.com.lanchonetebairro.adapter.driver.api.dto.CriacaoProdutoDTO;
 import br.com.lanchonetebairro.adapter.driver.api.dto.EdicaoProdutoDTO;
 import br.com.lanchonetebairro.adapter.driver.api.dto.ProdutoResponseDTO;
-import br.com.lanchonetebairro.core.applications.usecases.implementation.ProdutoBuscarPorCategoriaUseCase;
-import br.com.lanchonetebairro.core.applications.usecases.implementation.ProdutoBuscarPorIdUseCase;
-import br.com.lanchonetebairro.core.applications.usecases.implementation.ProdutoCriarUseCase;
-import br.com.lanchonetebairro.core.applications.usecases.implementation.ProdutoEditarUseCase;
+import br.com.lanchonetebairro.core.applications.usecases.implementation.produto.ProdutoBuscarPorCategoriaUseCase;
+import br.com.lanchonetebairro.core.applications.usecases.implementation.produto.ProdutoBuscarPorIdUseCase;
+import br.com.lanchonetebairro.core.applications.usecases.implementation.produto.ProdutoCriarUseCase;
+import br.com.lanchonetebairro.core.applications.usecases.implementation.produto.ProdutoEditarUseCase;
 import br.com.lanchonetebairro.core.domain.enums.CategoriaProduto;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -24,7 +30,10 @@ public class ProdutoController implements ProdutoAPI {
     private final ProdutoCriarUseCase produtoCriarUseCase;
     private final ProdutoBuscarPorCategoriaUseCase produtoBuscarPorCategoriaUseCase;
 
-    public ProdutoController(ProdutoBuscarPorIdUseCase produtoBuscarPorIdUseCase, ProdutoEditarUseCase produtoEditarUseCase, ProdutoCriarUseCase produtoCriarUseCase, ProdutoBuscarPorCategoriaUseCase produtoBuscarPorCategoriaUseCase) {
+    public ProdutoController(ProdutoBuscarPorIdUseCase produtoBuscarPorIdUseCase,
+                             ProdutoEditarUseCase produtoEditarUseCase,
+                             ProdutoCriarUseCase produtoCriarUseCase,
+                             ProdutoBuscarPorCategoriaUseCase produtoBuscarPorCategoriaUseCase) {
         this.produtoBuscarPorIdUseCase = produtoBuscarPorIdUseCase;
         this.produtoEditarUseCase = produtoEditarUseCase;
         this.produtoCriarUseCase = produtoCriarUseCase;

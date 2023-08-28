@@ -1,4 +1,4 @@
-package br.com.lanchonetebairro.core.applications.usecases.implementation;
+package br.com.lanchonetebairro.core.applications.usecases.implementation.cliente;
 
 import br.com.lanchonetebairro.core.applications.services.ClienteService;
 import br.com.lanchonetebairro.core.applications.usecases.UseCase;

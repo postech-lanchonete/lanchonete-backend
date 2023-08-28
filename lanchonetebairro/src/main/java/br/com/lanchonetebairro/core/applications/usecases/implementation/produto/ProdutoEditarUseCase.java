@@ -1,4 +1,4 @@
-package br.com.lanchonetebairro.core.applications.usecases.implementation;
+package br.com.lanchonetebairro.core.applications.usecases.implementation.produto;
 
 import br.com.lanchonetebairro.adapter.driver.api.dto.EdicaoProdutoDTO;
 import br.com.lanchonetebairro.adapter.driver.api.dto.ProdutoResponseDTO;

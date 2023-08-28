@@ -1,8 +1,7 @@
-package br.com.lanchonetebairro.core.applications.usecases.implementation;
+package br.com.lanchonetebairro.core.applications.usecases.implementation.cliente;
 
 import br.com.lanchonetebairro.adapter.driver.api.dto.ClienteResponseDTO;
 import br.com.lanchonetebairro.adapter.driver.api.dto.CriacaoClienteDTO;
-import br.com.lanchonetebairro.core.applications.exceptions.NotFoundException;
 import br.com.lanchonetebairro.core.applications.mappers.ClienteMapper;
 import br.com.lanchonetebairro.core.applications.services.ClienteService;
 import br.com.lanchonetebairro.core.applications.usecases.UseCase;
