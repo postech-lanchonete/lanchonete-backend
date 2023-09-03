@@ -1,9 +1,9 @@
 package br.com.lanchonetebairro.api.controllers;
 
-import br.com.lanchonetebairro.adapter.driven.infrastructure.repositories.ProdutoRepository;
-import br.com.lanchonetebairro.adapter.driver.api.dto.CriacaoProdutoDTO;
-import br.com.lanchonetebairro.core.domain.entities.Produto;
-import br.com.lanchonetebairro.core.domain.enums.CategoriaProduto;
+import br.com.lanchonetebairro.enterpriserules.entities.Produto;
+import br.com.lanchonetebairro.enterpriserules.enums.CategoriaProduto;
+import br.com.lanchonetebairro.interfaceadapters.dto.CriacaoProdutoDTO;
+import br.com.lanchonetebairro.interfaceadapters.repositories.ProdutoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -79,7 +79,7 @@ public class ProdutoControllerIntegrationTest {
         criarProduto(2L, "Batata Frita", CategoriaProduto.ACOMPANHAMENTO, BigDecimal.valueOf(15.0)
         );
 
-        mockMvc.perform(get("/v1/produtos/categoria/{categoria}", "LANCHE"))
+        mockMvc.perform(get("/v1/produtos?categoria={categoria}", "LANCHE"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].categoria", is("LANCHE")));
@@ -87,7 +87,7 @@ public class ProdutoControllerIntegrationTest {
 
     @Test
     public void buscarPorCategoria_DeveRetornarListaVaziaQuandoCategoriaNaoExistir() throws Exception {
-        mockMvc.perform(get("/v1/produtos/categoria/{categoria}", "SOBREMESA"))
+        mockMvc.perform(get("/v1/produtos?categoria={categoria}", "SOBREMESA"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
     }

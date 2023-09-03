@@ -1,8 +1,8 @@
 package br.com.lanchonetebairro.api.controllers;
 
-import br.com.lanchonetebairro.adapter.driven.infrastructure.repositories.ClienteRepository;
-import br.com.lanchonetebairro.adapter.driver.api.dto.CriacaoClienteDTO;
-import br.com.lanchonetebairro.core.domain.entities.Cliente;
+import br.com.lanchonetebairro.enterpriserules.entities.Cliente;
+import br.com.lanchonetebairro.interfaceadapters.dto.CriacaoClienteDTO;
+import br.com.lanchonetebairro.interfaceadapters.repositories.ClienteRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

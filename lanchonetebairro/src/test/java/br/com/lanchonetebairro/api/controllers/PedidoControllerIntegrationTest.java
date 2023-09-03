@@ -1,14 +1,14 @@
 package br.com.lanchonetebairro.api.controllers;
 
-import br.com.lanchonetebairro.adapter.driven.infrastructure.repositories.ClienteRepository;
-import br.com.lanchonetebairro.adapter.driven.infrastructure.repositories.PedidoRepository;
-import br.com.lanchonetebairro.adapter.driven.infrastructure.repositories.ProdutoRepository;
-import br.com.lanchonetebairro.adapter.driver.api.dto.CriacaoPedidoDTO;
-import br.com.lanchonetebairro.core.domain.entities.Cliente;
-import br.com.lanchonetebairro.core.domain.entities.Pedido;
-import br.com.lanchonetebairro.core.domain.entities.Produto;
-import br.com.lanchonetebairro.core.domain.enums.CategoriaProduto;
-import br.com.lanchonetebairro.core.domain.enums.StatusDoPedido;
+import br.com.lanchonetebairro.enterpriserules.entities.Cliente;
+import br.com.lanchonetebairro.enterpriserules.entities.Pedido;
+import br.com.lanchonetebairro.enterpriserules.entities.Produto;
+import br.com.lanchonetebairro.enterpriserules.enums.CategoriaProduto;
+import br.com.lanchonetebairro.enterpriserules.enums.StatusDoPedido;
+import br.com.lanchonetebairro.interfaceadapters.dto.CriacaoPedidoDTO;
+import br.com.lanchonetebairro.interfaceadapters.repositories.ClienteRepository;
+import br.com.lanchonetebairro.interfaceadapters.repositories.PedidoRepository;
+import br.com.lanchonetebairro.interfaceadapters.repositories.ProdutoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -74,8 +74,6 @@ public class PedidoControllerIntegrationTest {
 
     @Test
     public void buscarTodos_DeveRetornarListaVazia_QuandoNaoExistiremPedidosNoBanco() throws Exception {
-        pedidoRepository.deleteAll();
-
         mockMvc.perform(get("/v1/pedidos"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
@@ -88,7 +86,7 @@ public class PedidoControllerIntegrationTest {
         Cliente cliente = criarCliente("123456789");
         criarPedido(List.of(produtoHamburguer, produtoBatataFrita), cliente, StatusDoPedido.RECEBIDO);
         
-        mockMvc.perform(get("/v1/pedidos/RECEBIDO"))
+        mockMvc.perform(get("/v1/pedidos?status=RECEBIDO"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
     }
@@ -96,14 +94,14 @@ public class PedidoControllerIntegrationTest {
     @Test
     public void buscarPorStatus_DeveRetornarListaDePedidosComStatusRecebido_QuandoNenhumPedidoComStatusRecebidoNoBanco() throws Exception {
 
-        mockMvc.perform(get("/v1/pedidos/RECEBIDO"))
+        mockMvc.perform(get("/v1/pedidos?status=RECEBIDO"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test
     public void buscarPorStatus_DeveRetornarBadRequest_QuandoStatusInvalido() throws Exception {
-        mockMvc.perform(get("/v1/pedidos/XXX"))
+        mockMvc.perform(get("/v1/pedidos?status=XXX"))
                 .andExpect(status().isBadRequest());
     }
 
