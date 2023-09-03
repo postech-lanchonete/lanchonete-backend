@@ -27,8 +27,8 @@ spec:
                   key: MYSQL_ROOT_USERNAME
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
-                configMapKeyRef:
-                  name: db-configmap
+                secretKeyRef:
+                  name: db-secret
                   key: MYSQL_ROOT_PASSWORD
           volumeMounts:
             - name: config-volume
@@ -60,3 +60,6 @@ spec:
         - name: config-volume
           configMap:
             name: db-configmap
+        - name: secret-volume
+          secret:
+            secretName: db-secret
