@@ -10,6 +10,7 @@ public class PedidoResponseDTO {
     private Long id;
     private List<ProdutoResponseDTO> produtos;
     private ClienteResponseDTO cliente;
+    private PagamentoResponseDTO pagamento;
     private StatusDoPedido status;
     private LocalDateTime dataCriacao;
 
@@ -51,5 +52,13 @@ public class PedidoResponseDTO {
 
     public void setDataCriacao(LocalDateTime dataCriacao) {
         this.dataCriacao = dataCriacao;
+    }
+
+    public PagamentoResponseDTO getPagamento() {
+        return pagamento;
+    }
+
+    public void setPagamento(PagamentoResponseDTO pagamento) {
+        this.pagamento = pagamento;
     }
 }

@@ -2,6 +2,7 @@ package br.com.lanchonetebairro.enterpriserules.entities;
 
 import br.com.lanchonetebairro.applicationrules.exceptions.NegocioException;
 import br.com.lanchonetebairro.enterpriserules.enums.StatusDoPedido;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -12,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -37,6 +39,10 @@ public class Pedido {
             joinColumns = @JoinColumn(name = "pedido_id"),
             inverseJoinColumns = @JoinColumn(name = "produto_id"))
     private List<Produto> produtos;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "pagamento_id")
+    private Pagamento pagamento;
 
     @Enumerated(EnumType.STRING)
     private StatusDoPedido status;
@@ -81,6 +87,14 @@ public class Pedido {
 
     public void setProdutos(List<Produto> produtos) {
         this.produtos = produtos;
+    }
+
+    public Pagamento getPagamento() {
+        return pagamento;
+    }
+
+    public void setPagamento(Pagamento pagamento) {
+        this.pagamento = pagamento;
     }
 
     public StatusDoPedido getStatus() {
