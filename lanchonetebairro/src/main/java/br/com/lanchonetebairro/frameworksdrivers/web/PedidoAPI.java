@@ -33,7 +33,8 @@ public interface PedidoAPI {
                             array = @ArraySchema(schema = @Schema(implementation = PedidoResponseDTO.class)))
             }),
     })
-    List<PedidoResponseDTO> buscarTodos(@Parameter(description = "Status do pedido, podendo ser 'RECEBIDO', 'EM_PREPARACAO', 'PRONTO' ou 'FINALIZADO'") @RequestParam(required = false) String status);
+    List<PedidoResponseDTO> buscarTodos(@Parameter(description = "Status do pedido, podendo ser 'RECEBIDO', 'EM_PREPARACAO', 'PRONTO' ou 'FINALIZADO'", example = "RECEBIDO", schema = @Schema(type = "string", allowableValues = {"RECEBIDO", "EM_PREPARACAO", "PRONTO", "FINALIZADO"}))
+                                        @RequestParam(required = false, name = "status") String status);
 
     @Operation(
             summary = "Cria um novo pedido",

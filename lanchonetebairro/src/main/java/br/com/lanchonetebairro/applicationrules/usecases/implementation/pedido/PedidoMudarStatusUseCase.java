@@ -24,7 +24,7 @@ public class PedidoMudarStatusUseCase implements UseCase<Long, Pedido> {
         Pedido pedido = pedidoGateway.buscarPorId(id);
         this.mudarStatus(pedido);
         pedidoGateway.salvar(pedido);
-        if (pedido.getStatus() == StatusDoPedido.FINALIZADO) {
+        if (pedido.getStatus() == StatusDoPedido.PRONTO) {
             notificacaoClientePort.notificaCliente(pedido.getCliente(), "Seu pedido está pronto. Venha buscar!");
         }
         return pedido;

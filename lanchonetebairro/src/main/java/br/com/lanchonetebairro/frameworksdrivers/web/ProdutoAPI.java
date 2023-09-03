@@ -5,6 +5,7 @@ import br.com.lanchonetebairro.interfaceadapters.dto.EdicaoProdutoDTO;
 import br.com.lanchonetebairro.interfaceadapters.dto.ProdutoResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,7 +30,8 @@ public interface ProdutoAPI {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Produto encontrado ou lista vazia")
     })
-    List<ProdutoResponseDTO> buscarTodos(@Parameter(description = "Categoria do produto", example = "BEBIDA")  @RequestParam(required = false) String categoria);
+    List<ProdutoResponseDTO> buscarTodos(@Parameter(description = "Categoria do produto, podendo ser LANCHE, ACOMPANHAMENTO, BEBIDA ou SOBREMESA", example = "BEBIDA", schema = @Schema(type = "string", allowableValues = {"LANCHE", "ACOMPANHAMENTO", "BEBIDA", "SOBREMESA"}))
+                                         @RequestParam(required = false, name = "categoria") String categoria);
 
     @Operation(summary = "Criar um novo produto")
     @ApiResponse(responseCode = "201", description = "Produto criado com sucesso")
