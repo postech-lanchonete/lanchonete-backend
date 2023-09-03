@@ -1,13 +1,11 @@
-#TODO: Alterar para loadbalancer
 apiVersion: v1
 kind: Service
 metadata:
   name: svc-lanchonetebairro-replica
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: deployment-lanchonetebairro
   ports:
     - port: 80
       targetPort: 8080
-      nodePort: 31001
