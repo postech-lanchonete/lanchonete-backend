@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: db-configmap
-  annotations:
-    description: "Configmap para o banco de dados do projeto lanchonetebairro"
-data:
-  MYSQL_ROOT_USERNAME: "root"
