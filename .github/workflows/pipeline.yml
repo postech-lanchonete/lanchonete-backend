@@ -20,10 +20,10 @@ jobs:
           distribution: 'adopt'
 
       - name: Build
-        run: mvn --batch-mode -DskipTests package
+        run: ./gradlew build -x test
 
       - name: Test
-        run: mvn --batch-mode -Dmaven.test.failure.ignore=true test
+        run: ./gradlew test
 
       - name: Report
         uses: dorny/test-reporter@v1
