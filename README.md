@@ -50,7 +50,8 @@ As camadas do projeto foram divididas seguindo a logica proposta pela arquitetur
 
 Quando um desenvolvedor faz um commit no GitHub, a plataforma identifica se a ação deve ser acionada. Se sim, a pipeline inicia com o CI, que executa testes unitários. Se os testes forem bem-sucedidos, a imagem Docker é construída e enviada para o Docker Hub. Após a conclusão bem-sucedida do CI, o CD entra em ação. Ele começa baixando a imagem Docker, remove o contêiner em execução na instância EC2 e substitui-o pela nova imagem. Esse fluxo garante que seu software seja testado automaticamente e implantado de forma eficiente, melhorando a qualidade e a entrega contínua de novas funcionalidades.
 
-![image](https://github.com/postech-lanchonete/lanchonete-backend/assets/20681811/5a533026-1422-4cb0-b374-7acba1983162)
+![image](https://github.com/postech-lanchonete/lanchonete-backend/assets/20681811/15ad5f82-7b39-43d9-8f4b-b0778f9daeb2)
+
 
 
 ## Swagger
