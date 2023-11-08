@@ -39,9 +39,13 @@ jobs:
           version=$(date +'%Y%m%d%H%M%S')
           docker build -t danielmaria/lanchonetebairro-app:$version .
           echo "::set-output name=image_version::${version}"
+          echo $version >> image_version.txt
+          echo "::set-output name=image_version_file::image_version.txt"
 
       - name: Publish image to DockerHub
-        run: docker push danielmaria/lanchonetebairro-app:${{needs.build_image.outputs.image_version}}
+        run: |
+          version=$(cat image_version.txt)
+          docker push danielmaria/lanchonetebairro-app:$version
 
   deploy_ec2:
     runs-on: ubuntu-latest
