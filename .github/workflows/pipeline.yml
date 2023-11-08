@@ -35,17 +35,15 @@ jobs:
         run: sudo docker login -u danielmaria -p ${{secrets.DOCKER_PASSWORD}}
 
       - name: Build docker image
-        run: |
-          version=$(git rev-parse --short HEAD)
-          sudo docker build -t danielmaria/lanchonetebairro-app:$version .
+        run: sudo docker build -t danielmaria/lanchonetebairro-app:latest .
 
       - name: Publish image to DockerHub
-        run: |
-          version=$(git rev-parse --short HEAD)
-          sudo docker push danielmaria/lanchonetebairro-app:$version
+        run: sudo docker push danielmaria/lanchonetebairro-app:latest
+
+
 
   deploy_ec2:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted]
     if: github.ref == 'refs/heads/main' && success()
     needs: build_image
     steps:
@@ -53,14 +51,10 @@ jobs:
          uses: actions/checkout@v2
 
       - name: Pull Image from docker hub
-        run: |
-          version=$(git rev-parse --short HEAD)
-          sudo docker pull danielmaria/lanchonetebairro-app:$version
+        run: sudo docker pull danielmaria/lanchonetebairro-app:latest
 
       - name: Delete old container
-        run: docker rm -f lanchonetebairro-app-container || true
+        run: sudo docker rm -f lanchonetebairro-app-container || true
 
       - name: Run docker container
-        run: |
-          version=$(git rev-parse --short HEAD)
-          sudo docker run -d -p 8080:8080 --name lanchonetebairro-app-container danielmaria/lanchonetebairro-app:$version
+        run: sudo docker run -d -p 8080:8080 -e MYSQL_URL=${{secrets.MYSQL_URL}} -e MYSQL_ROOT_PASSWORD=${{secrets.MYSQL_ROOT_PASSWORD}} -e MYSQL_ROOT_USERNAME=${{secrets.MYSQL_ROOT_USERNAME}} --name lanchonetebairro-app-container danielmaria/lanchonetebairro-app:latest
