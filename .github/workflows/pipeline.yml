@@ -49,6 +49,9 @@ jobs:
     if: github.ref == 'refs/heads/deploy-to-ec2' && success()
     needs: build_image
     steps:
+      -  name: Checkout
+         uses: actions/checkout@v2
+
       - name: Pull Image from docker hub
         run: |
           version=$(git rev-parse --short HEAD)
