@@ -48,7 +48,7 @@ jobs:
       VERSION: ${{ steps.build_image.outputs.VERSION }}
 
   deploy_ec2:
-    runs-on: [self-hosted, "${{ needs.build_image.outputs.VERSION }}"]
+    runs-on: [self-hosted]
     if: github.ref == 'refs/heads/deploy-to-ec2' && success()
     needs: build_image
     steps:
