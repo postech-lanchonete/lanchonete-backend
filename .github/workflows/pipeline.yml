@@ -23,10 +23,6 @@ jobs:
       - name: Test
         run: ./gradlew test
 
-      - name: Save Image Version
-        id: save_image_version
-        run: echo "::set-output name=image_version::$(date +'%Y%m%d%H%M%S')"
-
   build_image:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/deploy-to-ec2' && success()
@@ -40,33 +36,28 @@ jobs:
 
       - name: Build docker image
         run: |
-          version=${{ needs.code_check.outputs.image_version }}
+          version=$(git rev-parse --short HEAD)
           docker build -t danielmaria/lanchonetebairro-app:$version .
-          echo $version >> image_version.txt
-          echo "::set-output name=image_version_file::image_version.txt"
 
       - name: Publish image to DockerHub
         run: |
-          version=$(cat image_version.txt)
+          version=$(git rev-parse --short HEAD)
           docker push danielmaria/lanchonetebairro-app:$version
 
   deploy_ec2:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/deploy-to-ec2' && success()
+    if: github.ref == 'heads/deploy-to-ec2' && success()
     needs: build_image
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Load Image Version
-        id: load_image_version
-        run: echo "::set-output name=image_version::$(cat image_version.txt)"
-
       - name: Pull Image from docker hub
-        run: docker pull danielmaria/lanchonetebairro-app:${{needs.build_image.outputs.image_version}}
+        run: |
+          version=$(git rev-parse --short HEAD)
+          docker pull danielmaria/lanchonetebairro-app:$version
 
       - name: Delete old container
         run: docker rm -f lanchonetebairro-app-container || true
 
       - name: Run docker container
-        run: docker run -d -p 8080:8080 --name lanchonetebairro-app-container danielmaria/lanchonetebairro-app:${{needs.build_image.outputs.image_version}}
+        run: |
+          version=$(git rev-parse --short HEAD)
+          docker run -d -p 8080:8080 --name lanchonetebairro-app-container danielmaria/lanchonetebairro-app:$version
