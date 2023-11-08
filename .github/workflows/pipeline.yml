@@ -34,15 +34,15 @@ jobs:
       - name: Login to docker hub
         run: sudo docker login -u danielmaria -p ${{secrets.DOCKER_PASSWORD}}
 
+      - name: Set Git version
+        id: set_version
+        run: echo ::set-output name=version::$(git rev-parse --short HEAD)
+
       - name: Build docker image
-        run: |
-          version=$(git rev-parse --short HEAD)
-          sudo docker build -t danielmaria/lanchonetebairro-app:$version .
+        run: sudo docker build -t danielmaria/lanchonetebairro-app:${{ env.VERSION }} .
 
       - name: Publish image to DockerHub
-        run: |
-          version=$(git rev-parse --short HEAD)
-          sudo docker push danielmaria/lanchonetebairro-app:$version
+        run: sudo docker push danielmaria/lanchonetebairro-app:${{ env.VERSION }}
 
   deploy_ec2:
     runs-on: [self-hosted]
@@ -54,7 +54,7 @@ jobs:
 
       - name: Pull Image from docker hub
         run: |
-          version=$(git rev-parse --short HEAD)
+          version=${{ needs.build_image.outputs.version }}
           sudo docker pull danielmaria/lanchonetebairro-app:$version
 
       - name: Delete old container
@@ -62,5 +62,5 @@ jobs:
 
       - name: Run docker container
         run: |
-          version=$(git rev-parse --short HEAD)
+          version=${{ needs.build_image.outputs.version }}
           sudo docker run -d -p 8080:8080 -e DOCKER_PASSWORD=${{secrets.DOCKER_PASSWORD}} -e DOCKER_PASSWORD=${{secrets.DOCKER_PASSWORD}} -e MYSQL_ROOT_USERNAME=${{secrets.MYSQL_ROOT_USERNAME}} --name lanchonetebairro-app-container danielmaria/lanchonetebairro-app:$version
