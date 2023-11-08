@@ -45,7 +45,7 @@ jobs:
           sudo docker push danielmaria/lanchonetebairro-app:$version
 
   deploy_ec2:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted]
     if: github.ref == 'refs/heads/deploy-to-ec2' && success()
     needs: build_image
     steps:
