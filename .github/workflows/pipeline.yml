@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/deploy-to-ec2' && success()
     outputs:
-      VERSION: ${{ steps.build_image.outputs.VERSION }}
+      VERSION: ${{ steps.set_version.outputs.VERSION }}
     needs: code_check
     steps:
       - name: Checkout
