@@ -54,7 +54,7 @@ jobs:
         run: sudo docker pull danielmaria/lanchonetebairro-app:latest
 
       - name: Delete old container
-        run: docker rm -f lanchonetebairro-app-container || true
+        run: sudo docker rm -f lanchonetebairro-app-container || true
 
       - name: Run docker container
         run: sudo docker run -d -p 8080:8080 -e DOCKER_PASSWORD=${{secrets.DOCKER_PASSWORD}} -e DOCKER_PASSWORD=${{secrets.DOCKER_PASSWORD}} -e MYSQL_ROOT_USERNAME=${{secrets.MYSQL_ROOT_USERNAME}} --name lanchonetebairro-app-container danielmaria/lanchonetebairro-app:latest
