@@ -26,6 +26,8 @@ jobs:
   build_image:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/deploy-to-ec2' && success()
+    outputs:
+      VERSION: ${{ steps.build_image.outputs.VERSION }}
     needs: code_check
     steps:
       - name: Checkout
@@ -44,8 +46,7 @@ jobs:
       - name: Publish image to DockerHub
         run: sudo docker push danielmaria/lanchonetebairro-app:${{ env.VERSION }}
 
-    outputs:
-      VERSION: ${{ steps.build_image.outputs.VERSION }}
+
 
   deploy_ec2:
     runs-on: [self-hosted]
