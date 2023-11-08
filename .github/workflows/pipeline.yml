@@ -23,6 +23,10 @@ jobs:
       - name: Test
         run: ./gradlew test
 
+      - name: Save Image Version
+        id: save_image_version
+        run: echo "::set-output name=image_version::$(date +'%Y%m%d%H%M%S')"
+
   build_image:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/deploy-to-ec2' && success()
@@ -36,9 +40,8 @@ jobs:
 
       - name: Build docker image
         run: |
-          version=$(date +'%Y%m%d%H%M%S')
+          version=${{ needs.code_check.outputs.image_version }}
           docker build -t danielmaria/lanchonetebairro-app:$version .
-          echo "::set-output name=image_version::${version}"
           echo $version >> image_version.txt
           echo "::set-output name=image_version_file::image_version.txt"
 
@@ -52,6 +55,13 @@ jobs:
     if: github.ref == 'refs/heads/deploy-to-ec2' && success()
     needs: build_image
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Load Image Version
+        id: load_image_version
+        run: echo "::set-output name=image_version::$(cat image_version.txt)"
+
       - name: Pull Image from docker hub
         run: docker pull danielmaria/lanchonetebairro-app:${{needs.build_image.outputs.image_version}}
 
