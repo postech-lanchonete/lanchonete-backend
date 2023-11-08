@@ -25,7 +25,7 @@ jobs:
 
   build_image:
     runs-on: ubuntu-latest
-    if: github.ref == 'deploy-to-ec2' && success()
+    if: github.ref == 'heads/deploy-to-ec2' && success()
     needs: code_check
     steps:
       - name: Checkout
@@ -45,7 +45,7 @@ jobs:
 
   deploy_ec2:
     runs-on: ubuntu-latest
-    if: github.ref == 'deploy-to-ec2' && success()
+    if: github.ref == 'heads/deploy-to-ec2' && success()
     needs: build_image
     steps:
       - name: Pull Image from docker hub
