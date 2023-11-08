@@ -48,7 +48,7 @@ jobs:
       VERSION: ${{ steps.build_image.outputs.VERSION }}
 
   deploy_ec2:
-    runs-on: [self-hosted, "${{ steps.build_image.outputs.VERSION }}"]
+    runs-on: [self-hosted, "${{ needs.build_image.outputs.VERSION }}"]
     if: github.ref == 'refs/heads/deploy-to-ec2' && success()
     needs: build_image
     steps:
@@ -56,7 +56,7 @@ jobs:
          uses: actions/checkout@v2
 
       - name: Pull Image from docker hub
-        run: sudo docker pull danielmaria/lanchonetebairro-app:${{ steps.build_image.outputs.VERSION }}
+        run: sudo docker pull danielmaria/lanchonetebairro-app:${{ needs.build_image.outputs.VERSION }}
 
       - name: Delete old container
         run: docker rm -f lanchonetebairro-app-container || true
@@ -64,4 +64,4 @@ jobs:
       - name: Run docker container
         run: |
           version=${{ needs.build_image.outputs.version }}
-          sudo docker run -d -p 8080:8080 -e DOCKER_PASSWORD=${{secrets.DOCKER_PASSWORD}} -e DOCKER_PASSWORD=${{secrets.DOCKER_PASSWORD}} -e MYSQL_ROOT_USERNAME=${{secrets.MYSQL_ROOT_USERNAME}} --name lanchonetebairro-app-container danielmaria/lanchonetebairro-app:${{ steps.build_image.outputs.VERSION }}
+          sudo docker run -d -p 8080:8080 -e DOCKER_PASSWORD=${{secrets.DOCKER_PASSWORD}} -e DOCKER_PASSWORD=${{secrets.DOCKER_PASSWORD}} -e MYSQL_ROOT_USERNAME=${{secrets.MYSQL_ROOT_USERNAME}} --name lanchonetebairro-app-container danielmaria/lanchonetebairro-app:${{ needs.build_image.outputs.VERSION }}
