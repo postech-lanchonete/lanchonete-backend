@@ -25,28 +25,28 @@ jobs:
 
   build_image:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/deploy-to-ec2' && success()
+    if: github.ref == 'refs/heads/main' && success()
     needs: code_check
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Login to docker hub
-        run: docker login -u danielmaria -p ${{secrets.DOCKER_PASSWORD}}
+        run: sudo docker login -u danielmaria -p ${{secrets.DOCKER_PASSWORD}}
 
       - name: Build docker image
         run: |
           version=$(git rev-parse --short HEAD)
-          docker build -t danielmaria/lanchonetebairro-app:$version .
+          sudo docker build -t danielmaria/lanchonetebairro-app:$version .
 
       - name: Publish image to DockerHub
         run: |
           version=$(git rev-parse --short HEAD)
-          docker push danielmaria/lanchonetebairro-app:$version
+          sudo docker push danielmaria/lanchonetebairro-app:$version
 
   deploy_ec2:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/deploy-to-ec2' && success()
+    if: github.ref == 'refs/heads/main' && success()
     needs: build_image
     steps:
       -  name: Checkout
@@ -55,7 +55,7 @@ jobs:
       - name: Pull Image from docker hub
         run: |
           version=$(git rev-parse --short HEAD)
-          docker pull danielmaria/lanchonetebairro-app:$version
+          sudo docker pull danielmaria/lanchonetebairro-app:$version
 
       - name: Delete old container
         run: docker rm -f lanchonetebairro-app-container || true
@@ -63,4 +63,4 @@ jobs:
       - name: Run docker container
         run: |
           version=$(git rev-parse --short HEAD)
-          docker run -d -p 8080:8080 --name lanchonetebairro-app-container danielmaria/lanchonetebairro-app:$version
+          sudo docker run -d -p 8080:8080 --name lanchonetebairro-app-container danielmaria/lanchonetebairro-app:$version
