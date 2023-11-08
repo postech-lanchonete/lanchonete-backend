@@ -25,7 +25,7 @@ jobs:
 
   build_image:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && success()
+    if: github.ref == 'refs/heads/deploy-to-ec2' && success()
     needs: code_check
     steps:
       - name: Checkout
@@ -46,7 +46,7 @@ jobs:
 
   deploy_ec2:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && success()
+    if: github.ref == 'refs/heads/deploy-to-ec2' && success()
     needs: build_image
     steps:
       -  name: Checkout
@@ -63,4 +63,4 @@ jobs:
       - name: Run docker container
         run: |
           version=$(git rev-parse --short HEAD)
-          sudo docker run -d -p 8080:8080 --name lanchonetebairro-app-container danielmaria/lanchonetebairro-app:$version
+          sudo docker run -d -p 8080:8080 -e DOCKER_PASSWORD=${{secrets.DOCKER_PASSWORD}} -e DOCKER_PASSWORD=${{secrets.DOCKER_PASSWORD}} -e MYSQL_ROOT_USERNAME=${{secrets.MYSQL_ROOT_USERNAME}} --name lanchonetebairro-app-container danielmaria/lanchonetebairro-app:$version
