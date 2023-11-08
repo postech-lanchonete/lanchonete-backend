@@ -25,7 +25,7 @@ jobs:
 
   build_image:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/deploy-to-ec2' && success()
+    if: github.ref == 'refs/heads/main' && success()
     needs: code_check
     steps:
       - name: Checkout
@@ -44,7 +44,7 @@ jobs:
 
   deploy_ec2:
     runs-on: [self-hosted]
-    if: github.ref == 'refs/heads/deploy-to-ec2' && success()
+    if: github.ref == 'refs/heads/main' && success()
     needs: build_image
     steps:
       -  name: Checkout
