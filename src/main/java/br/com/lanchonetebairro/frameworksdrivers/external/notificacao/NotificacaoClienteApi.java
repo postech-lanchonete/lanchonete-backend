@@ -1,7 +1,6 @@
 package br.com.lanchonetebairro.frameworksdrivers.external.notificacao;
 
 import br.com.lanchonetebairro.enterpriserules.entities.Cliente;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
