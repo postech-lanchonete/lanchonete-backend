@@ -17,11 +17,16 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-      - name: Build
-        run: ./gradlew build -x test
+      - name: Build and Test
+        run: |
+          ./gradlew clean build
+          ./gradlew test
 
-      - name: Test
-        run: ./gradlew test
+      - name: Jacoco Test Report
+        run: ./gradlew jacocoTestReport
+
+      - name: SonarQube Scan
+        run: ./gradlew sonarqube
 
   build_image:
     runs-on: ubuntu-latest

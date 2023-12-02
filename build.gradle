@@ -2,6 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.1.1'
 	id 'io.spring.dependency-management' version '1.1.0'
+	id 'jacoco'
+	id 'org.sonarqube' version '3.3'
 }
 
 group = 'br.com'
@@ -28,13 +30,15 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
-//	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//	testImplementation 'org.assertj:assertj-core'
+	implementation 'org.hsqldb:hsqldb:2.7.1'
+
 	implementation 'org.mapstruct:mapstruct:1.4.2.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'org.hsqldb:hsqldb:2.7.1'
 
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.1.0'
@@ -75,7 +79,38 @@ task generateMainMapperClasses(type: JavaCompile) {
 	}
 }
 
-
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+jacoco {
+	toolVersion = "0.8.7"
+}
+
+test {
+	jacoco {
+		enabled = true
+	}
+}
+
+jacocoTestReport {
+	reports {
+		xml.enabled true
+		html.enabled true
+		html.destination file("$buildDir/reports/jacoco/html")
+		xml.destination file("$buildDir/reports/jacoco/jacoco.xml")
+	}
+}
+
+sonarqube {
+	properties {
+		property 'sonar.host.url', 'https://sonarcloud.io'
+		property 'sonar.organization', 'postech-lanchonete'
+		property 'sonar.projectKey', 'postech-lanchonete_lanchonete-backend'
+		property 'sonar.projectName', 'lanchonete-backend'
+		property 'sonar.sources', 'src/main'
+		property 'sonar.tests', 'src/test'
+		property 'sonar.java.coveragePlugin', 'jacoco'
+		property 'sonar.jacoco.reportPaths', 'build/reports/jacoco/jacoco.xml'
+	}
 }
