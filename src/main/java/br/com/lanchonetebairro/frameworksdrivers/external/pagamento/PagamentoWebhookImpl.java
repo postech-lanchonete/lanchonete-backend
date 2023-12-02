@@ -52,7 +52,7 @@ public class PagamentoWebhookImpl implements PagamentoWebhook {
                 pagamento.setStatus(statusRandom);
                 recebeConfirmacaoPagamento(pagamento);
             } catch (InterruptedException e) {
-                throw new IllegalStateException(e);
+                Thread.currentThread().interrupt();
             }
         });
     }

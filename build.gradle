@@ -2,6 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.1.1'
 	id 'io.spring.dependency-management' version '1.1.0'
+	id 'jacoco'
+	id 'org.sonarqube' version '4.2.1.3168'
 }
 
 group = 'br.com'
@@ -28,16 +30,20 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
-//	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//	testImplementation 'org.assertj:assertj-core'
+	implementation 'org.hsqldb:hsqldb:2.7.1'
+
 	implementation 'org.mapstruct:mapstruct:1.4.2.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'org.hsqldb:hsqldb:2.7.1'
 
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.1.0'
+
+	implementation 'org.jacoco:org.jacoco.core:0.8.7'
 }
 
 sourceSets.main {
@@ -75,7 +81,60 @@ task generateMainMapperClasses(type: JavaCompile) {
 	}
 }
 
-
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+//test {
+//	useJUnitPlatform()
+//	finalizedBy jacocoTestReport // Garante que o relatório do Jacoco seja gerado após os testes
+//}
+//
+//jacoco {
+//	toolVersion = "0.8.7"
+//}
+
+jacoco {
+	toolVersion = '0.8.10'
+}
+
+jacocoTestReport {
+	getExecutionData().setFrom(fileTree(buildDir).include('/jacoco/*.exec'))
+	reports {
+		csv.required.set(false)
+		xml.required.set(true)
+		xml.outputLocation.set(file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml"))
+	}
+	dependsOn test
+}
+
+test {
+	finalizedBy jacocoTestReport
+}
+
+sonar {
+	properties {
+		property 'sonar.host.url', 'https://sonarcloud.io'
+		property 'sonar.organization', 'postech-lanchonete'
+		property 'sonar.projectKey', 'postech-lanchonete_lanchonete-backend'
+		property 'sonar.projectName', 'lanchonete-backend'
+		property 'sonar.sources', 'src/main'
+		property 'sonar.tests', 'src/test'
+		property 'sonar.jacoco.reportPaths', 'build/reports/jacoco/jacoco.xml'
+
+		property 'sonar.projectVersion', '1.0'
+		property 'sonar.language', 'java'
+		property 'sonar.java.binaries', "${buildDir}/classes"
+		property 'sonar.java.libraries', '**/*.jar'
+		property 'sonar.java.source', '17'
+		property 'sonar.core.codeCoveragePlugin', 'jacoco'
+		property 'sonar.coverage.jacoco.xmlReportPaths', "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+		property 'sonar.sourceEncoding', 'UTF-8'
+		property 'sonar.dynamicAnalysis', 'reuseReports'
+		property 'sonar.coverage.exclusions',
+				'**/br/com/lanchonetebairro/common/**,' +
+						'**/br/com/lanchonetebairro/model/**,' +
+						'**/br/com/lanchonetebairro/repository/**,' +
+						'**/br/com/lanchonetebairro/configuration/**'
+	}
 }
