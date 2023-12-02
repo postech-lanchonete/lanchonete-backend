@@ -65,7 +65,7 @@ public class PedidoController implements PedidoAPI {
         return pedidoBuscarTodosUseCase.realizar(pedido)
                 .stream()
                 .map(pedidoAdapter::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

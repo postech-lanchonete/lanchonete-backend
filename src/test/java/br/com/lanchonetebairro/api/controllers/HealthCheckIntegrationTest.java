@@ -14,13 +14,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class HealthCheckIntegrationTest {
+class HealthCheckIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    public void testHealthCheck() throws Exception {
+    void testHealthCheck() throws Exception {
         ResultMatcher expectedJson = jsonPath("$.status").value("UP");
 
         mockMvc.perform(get("/actuator/health"))

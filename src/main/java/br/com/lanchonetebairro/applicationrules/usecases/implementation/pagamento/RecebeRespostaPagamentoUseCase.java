@@ -6,8 +6,10 @@ import br.com.lanchonetebairro.enterpriserules.entities.Pedido;
 import br.com.lanchonetebairro.enterpriserules.enums.StatusDoPedido;
 import br.com.lanchonetebairro.enterpriserules.enums.StatusPagamento;
 import br.com.lanchonetebairro.interfaceadapters.gateways.PedidoGateway;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component("recebeRespostaPagamentoUseCase")
 public class RecebeRespostaPagamentoUseCase implements UseCase<Pagamento, Pedido> {
 
@@ -21,11 +23,13 @@ public class RecebeRespostaPagamentoUseCase implements UseCase<Pagamento, Pedido
     public Pedido realizar(Pagamento pagamento) {
         Pedido pedido = pedidoGateway.buscarPorId(pagamento.getPedido().getId());
         pedido.setPagamento(pagamento);
+        double valor = pagamento.getValor().doubleValue();
+        String cpf = pagamento.getPedido().getCliente().getCpf();
         if (pagamento.getStatus() == StatusPagamento.APROVADO) {
-            System.out.printf("Pagamento no valor de R$ %,.2f do cliente com CPF %s confirmado com sucesso\n", pagamento.getValor().doubleValue(), pagamento.getPedido().getCliente().getCpf());
+            log.info("Pagamento no valor de R$ {} do cliente com CPF {} confirmado com sucesso", valor, cpf);
             pedido.setStatus(StatusDoPedido.EM_PREPARACAO);
         } else {
-            System.out.printf("Pagamento no valor de R$ %,.2f do cliente com CPF %s REPROVADO\n", pagamento.getValor().doubleValue(), pagamento.getPedido().getCliente().getCpf());
+            log.info("Pagamento no valor de R$ {} do cliente com CPF {} REPROVADO   ", valor, cpf);
             pedido.setStatus(StatusDoPedido.FINALIZADO);
         }
         return pedidoGateway.salvar(pedido);

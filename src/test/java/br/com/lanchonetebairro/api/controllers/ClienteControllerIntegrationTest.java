@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
-public class ClienteControllerIntegrationTest {
+class ClienteControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
@@ -34,13 +34,13 @@ public class ClienteControllerIntegrationTest {
     private ClienteRepository clienteRepository;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         // Limpar dados de teste antes de cada execução de teste
         clienteRepository.deleteAll();
     }
 
     @Test
-    public void criarCliente_deveRetornarClienteCriado() throws Exception {
+    void criarCliente_deveRetornarClienteCriado() throws Exception {
         CriacaoClienteDTO criacaoClienteDTO = new CriacaoClienteDTO();
         criacaoClienteDTO.setNome("Cliente");
         criacaoClienteDTO.setSobrenome("Teste");
@@ -59,7 +59,7 @@ public class ClienteControllerIntegrationTest {
     }
 
     @Test
-    public void criarCliente_deveRetornar422_AoInserirClienteComEmailJaCadastrado() throws Exception {
+    void criarCliente_deveRetornar422_AoInserirClienteComEmailJaCadastrado() throws Exception {
         Cliente cliente = new Cliente();
         cliente.setEmail("teste.teste@test.com");
         clienteRepository.save(cliente);
@@ -79,7 +79,7 @@ public class ClienteControllerIntegrationTest {
 
 
     @Test
-    public void criarCliente_deveRetornar422_AoInserirClienteComNomeSobrenomeCPFJaCadastrado() throws Exception {
+    void criarCliente_deveRetornar422_AoInserirClienteComNomeSobrenomeCPFJaCadastrado() throws Exception {
         Cliente cliente = new Cliente();
         cliente.setNome("Cliente");
         cliente.setSobrenome("Teste");
@@ -100,7 +100,7 @@ public class ClienteControllerIntegrationTest {
     }
 
     @Test
-    public void buscarPorCPF_deveRetornarClienteExistente() throws Exception {
+    void buscarPorCPF_deveRetornarClienteExistente() throws Exception {
         Cliente cliente = new Cliente();
         cliente.setNome("Cliente");
         cliente.setSobrenome("Teste");
@@ -117,7 +117,7 @@ public class ClienteControllerIntegrationTest {
     }
 
     @Test
-    public void buscarPorCPF_deveRetornarNotFoundSeClienteNaoExistir() throws Exception {
+    void buscarPorCPF_deveRetornarNotFoundSeClienteNaoExistir() throws Exception {
         mockMvc.perform(get("/v1/clientes/{cpf}", "1234567891"))
                 .andExpect(status().isNotFound());
     }
@@ -125,7 +125,7 @@ public class ClienteControllerIntegrationTest {
     @TestConfiguration
     static class TestConfig {
         @Bean
-        public ObjectMapper objectMapper() {
+        ObjectMapper objectMapper() {
             return new ObjectMapper();
         }
     }

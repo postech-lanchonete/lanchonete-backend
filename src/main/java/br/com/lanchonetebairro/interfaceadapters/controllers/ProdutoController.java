@@ -64,7 +64,7 @@ public class ProdutoController implements ProdutoAPI {
         return produtoBuscarTodosUseCase.realizar(produto)
                 .stream()
                 .map(produtoAdapter::toDtoResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
