@@ -40,7 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 @AutoConfigureTestDatabase
-public class PedidoControllerIntegrationTest {
+class PedidoControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -55,13 +55,13 @@ public class PedidoControllerIntegrationTest {
     private ProdutoRepository produtoRepository;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         // Limpar dados de teste antes de cada execução de teste
         pedidoRepository.deleteAll();
     }
 
     @Test
-    public void buscarTodos_DeveRetornarListaDePedidos_QuandoExistiremPedidosNoBanco() throws Exception {
+    void buscarTodos_DeveRetornarListaDePedidos_QuandoExistiremPedidosNoBanco() throws Exception {
         Produto produtoHamburguer = criarProduto("Hambúrguer", CategoriaProduto.LANCHE, BigDecimal.valueOf(32.5));
         Produto produtoBatataFrita = criarProduto("Batata Frita", CategoriaProduto.ACOMPANHAMENTO, BigDecimal.valueOf(15.0));
         Cliente cliente = criarCliente("123456789");
@@ -73,14 +73,14 @@ public class PedidoControllerIntegrationTest {
     }
 
     @Test
-    public void buscarTodos_DeveRetornarListaVazia_QuandoNaoExistiremPedidosNoBanco() throws Exception {
+    void buscarTodos_DeveRetornarListaVazia_QuandoNaoExistiremPedidosNoBanco() throws Exception {
         mockMvc.perform(get("/v1/pedidos"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test
-    public void buscarPorStatus_DeveRetornarListaDePedidosComStatusRecebido_QuandoExistiremPedidosComEsseStatus() throws Exception {
+    void buscarPorStatus_DeveRetornarListaDePedidosComStatusRecebido_QuandoExistiremPedidosComEsseStatus() throws Exception {
         Produto produtoHamburguer = criarProduto("Hambúrguer", CategoriaProduto.LANCHE, BigDecimal.valueOf(32.5));
         Produto produtoBatataFrita = criarProduto("Batata Frita", CategoriaProduto.ACOMPANHAMENTO, BigDecimal.valueOf(15.0));
         Cliente cliente = criarCliente("123456789");
@@ -92,7 +92,7 @@ public class PedidoControllerIntegrationTest {
     }
 
     @Test
-    public void buscarPorStatus_DeveRetornarListaDePedidosComStatusRecebido_QuandoNenhumPedidoComStatusRecebidoNoBanco() throws Exception {
+    void buscarPorStatus_DeveRetornarListaDePedidosComStatusRecebido_QuandoNenhumPedidoComStatusRecebidoNoBanco() throws Exception {
 
         mockMvc.perform(get("/v1/pedidos?status=RECEBIDO"))
                 .andExpect(status().isOk())
@@ -100,13 +100,13 @@ public class PedidoControllerIntegrationTest {
     }
 
     @Test
-    public void buscarPorStatus_DeveRetornarBadRequest_QuandoStatusInvalido() throws Exception {
+    void buscarPorStatus_DeveRetornarBadRequest_QuandoStatusInvalido() throws Exception {
         mockMvc.perform(get("/v1/pedidos?status=XXX"))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void criar_DeveRegistrarPedidoNoBanco_QuandoReceberDadosCorretos() throws Exception {
+    void criar_DeveRegistrarPedidoNoBanco_QuandoReceberDadosCorretos() throws Exception {
         Produto produtoHamburguer = criarProduto("Hambúrguer", CategoriaProduto.LANCHE, BigDecimal.valueOf(32.5));
         Produto produtoBatataFrita = criarProduto("Batata Frita", CategoriaProduto.ACOMPANHAMENTO, BigDecimal.valueOf(15.0));
         Cliente cliente = criarCliente("123456789");
@@ -127,7 +127,7 @@ public class PedidoControllerIntegrationTest {
     }
 
     @Test
-    public void criar_DeveFalharAoRegistrarPedidoNoBanco_QuandoReceberPedidosInexistentes() throws Exception {
+    void criar_DeveFalharAoRegistrarPedidoNoBanco_QuandoReceberPedidosInexistentes() throws Exception {
         String cpf = "123456789";
         criarProduto("Hambúrguer", CategoriaProduto.LANCHE, BigDecimal.valueOf(32.5));
         criarProduto("Batata Frita", CategoriaProduto.ACOMPANHAMENTO, BigDecimal.valueOf(15.0));
@@ -144,7 +144,7 @@ public class PedidoControllerIntegrationTest {
     }
 
     @Test
-    public void criar_DeveFalharAoRegistrarPedidoNoBanco_QuandoReceberClienteInexistente() throws Exception {
+    void criar_DeveFalharAoRegistrarPedidoNoBanco_QuandoReceberClienteInexistente() throws Exception {
         String cpf = "123456789";
         Produto produtoHamburguer = criarProduto("Hambúrguer", CategoriaProduto.LANCHE, BigDecimal.valueOf(32.5));
         Produto produtoBatataFrita = criarProduto("Batata Frita", CategoriaProduto.ACOMPANHAMENTO, BigDecimal.valueOf(15.0));
@@ -161,7 +161,7 @@ public class PedidoControllerIntegrationTest {
     }
 
     @Test
-    public void mudarStatus_DeveAtualizarStatusParaEmPreparacao_QuandoPedidoExistirEStatusForRecebido() throws Exception {
+    void mudarStatus_DeveAtualizarStatusParaEmPreparacao_QuandoPedidoExistirEStatusForRecebido() throws Exception {
         Produto produtoHamburguer = criarProduto("Hambúrguer", CategoriaProduto.LANCHE, BigDecimal.valueOf(32.5));
         Cliente cliente = criarCliente("123456789");
         Pedido pedido = criarPedido(new ArrayList<>(List.of(produtoHamburguer)), cliente, StatusDoPedido.RECEBIDO);
@@ -172,7 +172,7 @@ public class PedidoControllerIntegrationTest {
     }
 
     @Test
-    public void mudarStatus_DeveAtualizarStatusParaPronto_QuandoPedidoExistirEStatusForEmPreparacao() throws Exception {
+    void mudarStatus_DeveAtualizarStatusParaPronto_QuandoPedidoExistirEStatusForEmPreparacao() throws Exception {
         Produto produtoHamburguer = criarProduto("Hambúrguer", CategoriaProduto.LANCHE, BigDecimal.valueOf(32.5));
         Cliente cliente = criarCliente("123456789");
         Pedido pedido = criarPedido(new ArrayList<>(List.of(produtoHamburguer)), cliente, StatusDoPedido.EM_PREPARACAO);
@@ -183,7 +183,7 @@ public class PedidoControllerIntegrationTest {
     }
     @Test
     @Transactional
-    public void mudarStatus_DeveAtualizarStatusParaFinalizado_QuandoPedidoExistirEStatusForPronto() throws Exception {
+    void mudarStatus_DeveAtualizarStatusParaFinalizado_QuandoPedidoExistirEStatusForPronto() throws Exception {
         Produto produtoHamburguer = criarProduto("Hambúrguer", CategoriaProduto.LANCHE, BigDecimal.valueOf(32.5));
         Cliente cliente = criarCliente("123456789");
         Pedido pedido = criarPedido(new ArrayList<>(List.of(produtoHamburguer)), cliente, StatusDoPedido.PRONTO);
@@ -194,7 +194,7 @@ public class PedidoControllerIntegrationTest {
     }
 
     @Test
-    public void mudarStatus_DeveManterStatusFinalizado_QuandoPedidoExistirEStatusForFinalizado() throws Exception {
+    void mudarStatus_DeveManterStatusFinalizado_QuandoPedidoExistirEStatusForFinalizado() throws Exception {
         Produto produtoHamburguer = criarProduto("Hambúrguer", CategoriaProduto.LANCHE, BigDecimal.valueOf(32.5));
         Cliente cliente = criarCliente("123456789");
         Pedido pedido = criarPedido(new ArrayList<>(List.of(produtoHamburguer)), cliente, StatusDoPedido.FINALIZADO);

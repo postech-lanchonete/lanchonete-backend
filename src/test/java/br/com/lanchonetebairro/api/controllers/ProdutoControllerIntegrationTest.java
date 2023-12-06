@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 @AutoConfigureTestDatabase
-public class ProdutoControllerIntegrationTest {
+class ProdutoControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -46,13 +46,13 @@ public class ProdutoControllerIntegrationTest {
     private ProdutoRepository produtoRepository;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         // Limpar dados de teste antes de cada execução de teste
         produtoRepository.deleteAll();
     }
 
     @Test
-    public void buscarPorId_DeveRetornarProdutoExistente() throws Exception {
+    void buscarPorId_DeveRetornarProdutoExistente() throws Exception {
         Produto produto = criarProduto(1L, "Hambúrguer", CategoriaProduto.LANCHE, BigDecimal.valueOf(32.5)
         );
 
@@ -67,13 +67,13 @@ public class ProdutoControllerIntegrationTest {
     }
 
     @Test
-    public void buscarPorId_DeveRetornar404QuandoProdutoNaoExistir() throws Exception {
+    void buscarPorId_DeveRetornar404QuandoProdutoNaoExistir() throws Exception {
         mockMvc.perform(get("/v1/produtos/{id}", 999))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    public void buscarPorCategoria_DeveRetornarProdutosDaCategoria() throws Exception {
+    void buscarPorCategoria_DeveRetornarProdutosDaCategoria() throws Exception {
         criarProduto(1L, "Hambúrguer", CategoriaProduto.LANCHE, BigDecimal.valueOf(32.5)
         );
         criarProduto(2L, "Batata Frita", CategoriaProduto.ACOMPANHAMENTO, BigDecimal.valueOf(15.0)
@@ -86,14 +86,14 @@ public class ProdutoControllerIntegrationTest {
     }
 
     @Test
-    public void buscarPorCategoria_DeveRetornarListaVaziaQuandoCategoriaNaoExistir() throws Exception {
+    void buscarPorCategoria_DeveRetornarListaVaziaQuandoCategoriaNaoExistir() throws Exception {
         mockMvc.perform(get("/v1/produtos?categoria={categoria}", "SOBREMESA"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test
-    public void criar_DeveRetornarProdutoCriado() throws Exception {
+    void criar_DeveRetornarProdutoCriado() throws Exception {
         CriacaoProdutoDTO dto = new CriacaoProdutoDTO();
         dto.setNome("Hambúrguer");
         dto.setCategoria(CategoriaProduto.LANCHE);
@@ -122,7 +122,7 @@ public class ProdutoControllerIntegrationTest {
     }
 
     @Test
-    public void criar_DeveRetornar400QuandoNomeNaoInformado() throws Exception {
+    void criar_DeveRetornar400QuandoNomeNaoInformado() throws Exception {
         CriacaoProdutoDTO dto = new CriacaoProdutoDTO();
         dto.setCategoria(CategoriaProduto.LANCHE);
         dto.setPreco(BigDecimal.valueOf(32.5));
@@ -136,7 +136,7 @@ public class ProdutoControllerIntegrationTest {
     }
 
     @Test
-    public void criar_DeveRetornar400QuandoCategoriaNaoInformada() throws Exception {
+    void criar_DeveRetornar400QuandoCategoriaNaoInformada() throws Exception {
         CriacaoProdutoDTO dto = new CriacaoProdutoDTO();
         dto.setNome("Hambúrguer");
         dto.setPreco(BigDecimal.valueOf(32.5));
@@ -150,7 +150,7 @@ public class ProdutoControllerIntegrationTest {
     }
 
     @Test
-    public void criar_DeveRetornar400QuandoPrecoNaoInformado() throws Exception {
+    void criar_DeveRetornar400QuandoPrecoNaoInformado() throws Exception {
         CriacaoProdutoDTO dto = new CriacaoProdutoDTO();
         dto.setNome("Hambúrguer");
         dto.setCategoria(CategoriaProduto.LANCHE);
@@ -164,7 +164,7 @@ public class ProdutoControllerIntegrationTest {
     }
 
     @Test
-    public void criar_DeveRetornar422_AoInserirProdutoComMesmoNomeJaExistente() throws Exception {
+    void criar_DeveRetornar422_AoInserirProdutoComMesmoNomeJaExistente() throws Exception {
         Produto produto = new Produto();
         produto.setNome("Hambúrguer");
         produtoRepository.save(produto);
@@ -183,7 +183,7 @@ public class ProdutoControllerIntegrationTest {
     }
 
     @Test
-    public void editar_DeveRetornarProdutoEditado() throws Exception {
+    void editar_DeveRetornarProdutoEditado() throws Exception {
         Produto produto = criarProduto(1L, "Hambúrguer", CategoriaProduto.LANCHE, BigDecimal.valueOf(32.5));
 
         CriacaoProdutoDTO dto = new CriacaoProdutoDTO();
@@ -210,7 +210,7 @@ public class ProdutoControllerIntegrationTest {
     }
 
     @Test
-    public void editar_DeveRetornar404QuandoProdutoNaoExistir() throws Exception {
+    void editar_DeveRetornar404QuandoProdutoNaoExistir() throws Exception {
         CriacaoProdutoDTO dto = new CriacaoProdutoDTO();
         dto.setNome("XXX");
 

@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Validated
 @RestController
@@ -65,7 +64,7 @@ public class PedidoController implements PedidoAPI {
         return pedidoBuscarTodosUseCase.realizar(pedido)
                 .stream()
                 .map(pedidoAdapter::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

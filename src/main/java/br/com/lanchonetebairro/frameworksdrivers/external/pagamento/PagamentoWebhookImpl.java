@@ -9,15 +9,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import java.security.SecureRandom;
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
-
 
 @Slf4j
 @Component
 public class PagamentoWebhookImpl implements PagamentoWebhook {
 
-    SecureRandom random = new SecureRandom();
     private final UseCase<Pagamento, Pedido> recebeRespostaPagamentoUseCase;
 
     public PagamentoWebhookImpl(@Qualifier("recebeRespostaPagamentoUseCase") UseCase<Pagamento, Pedido> recebeRespostaPagamentoUseCase) {
@@ -50,10 +48,10 @@ public class PagamentoWebhookImpl implements PagamentoWebhook {
     public CompletableFuture<Void> simulaAcionamentoWebhookResposta(Pagamento pagamento) {
         return CompletableFuture.runAsync(() -> {
             try {
-                int valorRandom = random.nextInt(10000);
+                int valorRandom = (new Random().nextInt() * 10000);
                 log.info("Delay de " + valorRandom + " milisegundos para simular o acionamento do webhook de resposta");
                 Thread.sleep(valorRandom);
-                StatusPagamento statusRandom = valorRandom > 1000 ? StatusPagamento.APROVADO : StatusPagamento.REPROVADO;
+                StatusPagamento statusRandom = valorRandom > 100 ? StatusPagamento.APROVADO : StatusPagamento.REPROVADO;
                 pagamento.setStatus(statusRandom);
                 recebeConfirmacaoPagamento(pagamento);
             } catch (InterruptedException e) {
