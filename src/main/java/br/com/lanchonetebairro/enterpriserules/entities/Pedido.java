@@ -15,6 +15,8 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
@@ -23,6 +25,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "Pedidos")
 public class Pedido {
@@ -49,15 +53,15 @@ public class Pedido {
 
     private LocalDateTime dataCriacao;
 
+    public Pedido() {
+    }
+
     public Pedido(Cliente cliente, List<Produto> produtos) {
         this.status = StatusDoPedido.RECEBIDO;
         this.dataCriacao = LocalDateTime.now();
         this.cliente = cliente;
         this.produtos = produtos;
         validar();
-    }
-
-    public Pedido() {
     }
 
     private void validar() {
@@ -67,50 +71,6 @@ public class Pedido {
         if (CollectionUtils.isEmpty(produtos)) {
             throw new NegocioException("Deve ser informado ao menos um produto válido para criar um pedido");
         }
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
-    public List<Produto> getProdutos() {
-        return produtos;
-    }
-
-    public void setProdutos(List<Produto> produtos) {
-        this.produtos = produtos;
-    }
-
-    public Pagamento getPagamento() {
-        return pagamento;
-    }
-
-    public void setPagamento(Pagamento pagamento) {
-        this.pagamento = pagamento;
-    }
-
-    public StatusDoPedido getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusDoPedido statusDoPedido) {
-        this.status = statusDoPedido;
-    }
-
-    public LocalDateTime getDataCriacao() {
-        return dataCriacao;
-    }
-
-    public void setDataCriacao(LocalDateTime dataCriacao) {
-        this.dataCriacao = dataCriacao;
     }
 
     public BigDecimal calculaValorTotal() {

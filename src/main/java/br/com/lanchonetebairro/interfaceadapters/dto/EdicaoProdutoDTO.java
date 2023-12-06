@@ -2,9 +2,13 @@ package br.com.lanchonetebairro.interfaceadapters.dto;
 
 import br.com.lanchonetebairro.enterpriserules.enums.CategoriaProduto;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
+@Getter
+@Setter
 @Schema(description = "Objeto de edição de dados para produto")
 public class EdicaoProdutoDTO {
 
@@ -21,44 +25,4 @@ public class EdicaoProdutoDTO {
 
     @Schema(description = "Imagem do produto em BLOB")
     private String imagem;
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public CategoriaProduto getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(CategoriaProduto categoria) {
-        this.categoria = categoria;
-    }
-
-    public BigDecimal getPreco() {
-        return preco;
-    }
-
-    public void setPreco(BigDecimal preco) {
-        this.preco = preco;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public String getImagem() {
-        return imagem;
-    }
-
-    public void setImagem(String imagem) {
-        this.imagem = imagem;
-    }
 }

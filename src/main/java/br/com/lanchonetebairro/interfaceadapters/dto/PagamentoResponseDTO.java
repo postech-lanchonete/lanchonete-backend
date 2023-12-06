@@ -1,15 +1,12 @@
 package br.com.lanchonetebairro.interfaceadapters.dto;
 
 import br.com.lanchonetebairro.enterpriserules.enums.StatusPagamento;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class PagamentoResponseDTO {
     private StatusPagamento status;
 
-    public StatusPagamento getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusPagamento status) {
-        this.status = status;
-    }
 }

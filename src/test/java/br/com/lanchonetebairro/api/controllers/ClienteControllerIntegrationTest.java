@@ -84,6 +84,7 @@ public class ClienteControllerIntegrationTest {
         cliente.setNome("Cliente");
         cliente.setSobrenome("Teste");
         cliente.setCpf("1234567891");
+        cliente.setSenha("1234567891");
         clienteRepository.save(cliente);
 
         CriacaoClienteDTO criacaoClienteDTO = new CriacaoClienteDTO();
