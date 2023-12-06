@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
+@SuppressWarnings("unused")
 @Schema(description = "Objeto de edição de dados para produto")
 public class EdicaoProdutoDTO {
 

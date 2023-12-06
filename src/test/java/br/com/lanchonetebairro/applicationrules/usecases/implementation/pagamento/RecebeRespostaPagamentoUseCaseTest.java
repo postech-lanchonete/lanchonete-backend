@@ -26,12 +26,12 @@ public class RecebeRespostaPagamentoUseCaseTest {
     private RecebeRespostaPagamentoUseCase recebeRespostaPagamentoUseCase;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void testPagamentoAprovado() {
+    void testPagamentoAprovado() {
         Pagamento pagamento = new Pagamento();
         Pedido pedido = criarStubPedido(pagamento);
         when(pedidoGateway.buscarPorId(anyLong())).thenReturn(pedido);
@@ -40,12 +40,12 @@ public class RecebeRespostaPagamentoUseCaseTest {
         pagamento.setStatus(StatusPagamento.APROVADO);
         Pedido resultado = recebeRespostaPagamentoUseCase.realizar(pagamento);
 
-        assertEquals(resultado.getStatus(), StatusDoPedido.EM_PREPARACAO);
+        assertEquals(StatusDoPedido.EM_PREPARACAO, resultado.getStatus());
         verify(pedidoGateway).salvar(pedido);
     }
 
     @Test
-    public void testPagamentoReprovado() {
+    void testPagamentoReprovado() {
         Pagamento pagamento = new Pagamento();
         Pedido pedido = criarStubPedido(pagamento);
         when(pedidoGateway.buscarPorId(anyLong())).thenReturn(pedido);
@@ -54,7 +54,7 @@ public class RecebeRespostaPagamentoUseCaseTest {
         pagamento.setStatus(StatusPagamento.REPROVADO);
         Pedido resultado = recebeRespostaPagamentoUseCase.realizar(pagamento);
 
-        assertEquals(resultado.getStatus(), StatusDoPedido.FINALIZADO);
+        assertEquals(StatusDoPedido.FINALIZADO, resultado.getStatus());
         verify(pedidoGateway).salvar(pedido);
     }
 

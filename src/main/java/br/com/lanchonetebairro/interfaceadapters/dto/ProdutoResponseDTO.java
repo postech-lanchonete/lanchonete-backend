@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
+@SuppressWarnings("unused")
 public class ProdutoResponseDTO {
 
     @Schema(description = "ID do produto.")

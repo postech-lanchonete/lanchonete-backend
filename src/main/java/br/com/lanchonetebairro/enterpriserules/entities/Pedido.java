@@ -27,6 +27,7 @@ import java.util.Objects;
 
 @Getter
 @Setter
+@SuppressWarnings("unused")
 @Entity
 @Table(name = "Pedidos")
 public class Pedido {

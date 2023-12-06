@@ -9,6 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@SuppressWarnings("unused")
 @Schema(description = "Objeto de transferência de dados para pedido")
 public class CriacaoPedidoDTO {
     @NotEmpty(message = "Deve ser informado o CPF do cliente que fez o pedido.")

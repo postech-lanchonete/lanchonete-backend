@@ -9,8 +9,8 @@ import java.util.List;
 
 @Getter
 @Setter
+@SuppressWarnings("unused")
 public class PedidoResponseDTO {
-
     private Long id;
     private List<ProdutoResponseDTO> produtos;
     private ClienteResponseDTO cliente;

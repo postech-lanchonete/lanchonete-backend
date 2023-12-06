@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
+@SuppressWarnings("unused")
 @Entity
 @Table(name = "Pagamento")
 public class Pagamento {

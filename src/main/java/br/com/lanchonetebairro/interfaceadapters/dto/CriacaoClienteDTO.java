@@ -7,6 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@SuppressWarnings("unused")
 public class CriacaoClienteDTO {
     @NotBlank(message = "Nome é mandatorio")
     private String nome;

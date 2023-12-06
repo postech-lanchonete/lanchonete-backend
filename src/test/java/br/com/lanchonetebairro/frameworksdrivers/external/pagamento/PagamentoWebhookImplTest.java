@@ -27,12 +27,12 @@ public class PagamentoWebhookImplTest {
     private PagamentoWebhookImpl pagamentoWebhook;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void testRegistrarPagamento() {
+    void testRegistrarPagamento() {
         Pagamento pagamento = new Pagamento();
         Pedido pedido = criarStubPedido(pagamento);
 
@@ -45,13 +45,13 @@ public class PagamentoWebhookImplTest {
     }
 
     @Test
-    public void testSimulaAcionamentoWebhookResposta() throws InterruptedException, ExecutionException {
+    void testSimulaAcionamentoWebhookResposta() throws InterruptedException, ExecutionException {
         Pagamento pagamento = new Pagamento();
 
         CompletableFuture<Void> future = pagamentoWebhook.simulaAcionamentoWebhookResposta(pagamento);
         future.get();
 
-        verify(recebeRespostaPagamentoUseCase, times(1)).realizar(eq(pagamento));
+        verify(recebeRespostaPagamentoUseCase, times(1)).realizar(pagamento);
     }
 
     private Pedido criarStubPedido(Pagamento pagamento) {

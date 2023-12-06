@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
+@SuppressWarnings("unused")
 @Schema(description = "Objeto de transferência de dados para produto")
 public class CriacaoProdutoDTO {
 

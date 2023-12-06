@@ -9,10 +9,11 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
-@Table(name = "Clientes")
 @Getter
 @Setter
+@SuppressWarnings("unused")
+@Entity
+@Table(name = "Clientes")
 public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

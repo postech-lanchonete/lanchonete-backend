@@ -36,7 +36,7 @@ public class PagamentoWebhookImpl implements PagamentoWebhook {
         return pagamento;
     }
 
-    public void recebeConfirmacaoPagamento(Pagamento pagamento) {
+    void recebeConfirmacaoPagamento(Pagamento pagamento) {
         log.info("............. Confirmacao pagamento recebida .............");
         try {
             recebeRespostaPagamentoUseCase.realizar(pagamento);
