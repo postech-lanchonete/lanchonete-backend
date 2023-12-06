@@ -4,12 +4,15 @@ import br.com.lanchonetebairro.applicationrules.usecases.UseCase;
 import br.com.lanchonetebairro.enterpriserules.entities.Pagamento;
 import br.com.lanchonetebairro.enterpriserules.entities.Pedido;
 import br.com.lanchonetebairro.enterpriserules.enums.StatusPagamento;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 
+@Slf4j
 @Component
 public class PagamentoWebhookImpl implements PagamentoWebhook {
 
@@ -25,19 +28,19 @@ public class PagamentoWebhookImpl implements PagamentoWebhook {
         pagamento.setValor(pedido.calculaValorTotal());
         pagamento.setStatus(StatusPagamento.PENDENTE);
         pagamento.setPedido(pedido);
-        System.out.println("............. Registrando pagamento .............");
-        System.out.printf("Pagamento no valor de R$ %,.2f do cliente com CPF %s registrado com sucesso\n", pagamento.getValor().doubleValue(), pedido.getCliente().getCpf());
+        log.info("............. Registrando pagamento .............");
+        log.info("Pagamento no valor de R$ {} do cliente com CPF {} registrado com sucesso", pagamento.getValor().doubleValue(), pedido.getCliente().getCpf());
 
         simulaAcionamentoWebhookResposta(pagamento);
         return pagamento;
     }
 
     public void recebeConfirmacaoPagamento(Pagamento pagamento) {
-        System.out.println("............. Confirmacao pagamento recebida .............");
+        log.info("............. Confirmacao pagamento recebida .............");
         try {
             recebeRespostaPagamentoUseCase.realizar(pagamento);
         } catch (Exception e) {
-            System.out.println("Erro ao receber confirmação de pagamento");
+            log.error("Erro ao receber confirmação de pagamento");
         }
     }
 
@@ -45,8 +48,8 @@ public class PagamentoWebhookImpl implements PagamentoWebhook {
     public CompletableFuture<Void> simulaAcionamentoWebhookResposta(Pagamento pagamento) {
         return CompletableFuture.runAsync(() -> {
             try {
-                int valorRandom = (int) (Math.random() * 10000);
-                System.out.println("Delay de " + valorRandom + " milisegundos para simular o acionamento do webhook de resposta");
+                int valorRandom = (new Random().nextInt() * 10000);
+                log.info("Delay de " + valorRandom + " milisegundos para simular o acionamento do webhook de resposta");
                 Thread.sleep(valorRandom);
                 StatusPagamento statusRandom = valorRandom > 100 ? StatusPagamento.APROVADO : StatusPagamento.REPROVADO;
                 pagamento.setStatus(statusRandom);
