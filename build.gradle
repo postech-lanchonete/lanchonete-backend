@@ -84,3 +84,49 @@ task generateMainMapperClasses(type: JavaCompile) {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+
+jacoco {
+	toolVersion = '0.8.10'
+}
+
+jacocoTestReport {
+	getExecutionData().setFrom(fileTree(buildDir).include('/jacoco/*.exec'))
+	reports {
+		csv.required.set(false)
+		xml.required.set(true)
+		xml.outputLocation.set(file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml"))
+	}
+	dependsOn test
+}
+
+test {
+	finalizedBy jacocoTestReport
+}
+
+sonar {
+	properties {
+		property 'sonar.host.url', 'https://sonarcloud.io'
+		property 'sonar.organization', 'postech-lanchonete'
+		property 'sonar.projectKey', 'postech-lanchonete_lanchonete-backend'
+		property 'sonar.projectName', 'lanchonete-backend'
+		property 'sonar.sources', 'src/main'
+		property 'sonar.tests', 'src/test'
+		property 'sonar.jacoco.reportPaths', 'build/reports/jacoco/jacoco.xml'
+
+		property 'sonar.projectVersion', '1.0'
+		property 'sonar.language', 'java'
+		property 'sonar.java.binaries', "${buildDir}/classes"
+		property 'sonar.java.libraries', '**/*.jar'
+		property 'sonar.java.source', '17'
+		property 'sonar.core.codeCoveragePlugin', 'jacoco'
+		property 'sonar.coverage.jacoco.xmlReportPaths', "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+		property 'sonar.sourceEncoding', 'UTF-8'
+		property 'sonar.dynamicAnalysis', 'reuseReports'
+		property 'sonar.coverage.exclusions',
+				'**/br/com/lanchonetebairro/common/**,' +
+						'**/br/com/lanchonetebairro/model/**,' +
+						'**/br/com/lanchonetebairro/repository/**,' +
+						'**/br/com/lanchonetebairro/configuration/**'
+	}
+}
