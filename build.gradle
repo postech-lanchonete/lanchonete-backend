@@ -34,15 +34,28 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'org.hsqldb:hsqldb:2.7.1'
 
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.1.0'
-    implementation 'org.jacoco:org.jacoco.core:0.8.7'
     implementation "org.mapstruct:mapstruct:${mapstructVersion}", "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}", "org.projectlombok:lombok:${lombokVersion}", "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+
+
+	implementation 'org.hsqldb:hsqldb:2.7.1'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.jacoco:org.jacoco.core:0.8.7'
+	implementation 'io.cucumber:cucumber-spring:7.0.0'
+	implementation 'io.cucumber:cucumber-java:7.0.0'
+	implementation 'io.cucumber:cucumber-java8:7.0.0'
+	implementation 'io.cucumber:cucumber-junit:7.0.0'
+	implementation 'io.cucumber:cucumber-core:7.0.0'
+	implementation 'io.cucumber:gherkin:15.0.0'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.cucumber:cucumber-java:7.0.0'
+	testImplementation 'io.cucumber:cucumber-spring:7.0.0'
+	testImplementation 'io.cucumber:cucumber-junit:7.0.0'
 }
 
 sourceSets.main {

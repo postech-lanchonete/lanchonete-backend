@@ -4,7 +4,10 @@ import br.com.lanchonetebairro.enterpriserules.enums.CategoriaProduto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -13,6 +16,8 @@ import java.math.BigDecimal;
 @Setter
 @SuppressWarnings("unused")
 @Schema(description = "Objeto de transferência de dados para produto")
+@NoArgsConstructor
+@AllArgsConstructor
 public class CriacaoProdutoDTO {
 
     @NotBlank(message = "Nome do produto é obrigatório")
@@ -23,6 +28,7 @@ public class CriacaoProdutoDTO {
     private CategoriaProduto categoria;
 
     @NotNull(message = "Preço do produto é obrigatório")
+    @Positive(message = "Preço do produto deve ser maior que zero")
     @Schema(description = "Preço do produto.")
     private BigDecimal preco;
 
