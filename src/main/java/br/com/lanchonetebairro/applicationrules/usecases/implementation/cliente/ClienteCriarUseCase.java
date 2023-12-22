@@ -37,7 +37,7 @@ public class ClienteCriarUseCase implements UseCase<Cliente, Cliente> {
 
     private void procurarPorEmail(Cliente cliente) {
         Cliente clienteExample = new Cliente();
-        clienteExample.setCpf(cliente.getEmail());
+        clienteExample.setEmail(cliente.getEmail());
         clienteGateway.buscarPor(Example.of(clienteExample))
                 .stream()
                 .findFirst()

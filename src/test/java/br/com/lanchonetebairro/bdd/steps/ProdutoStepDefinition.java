@@ -1,275 +1,182 @@
 package br.com.lanchonetebairro.bdd.steps;
 
+import br.com.lanchonetebairro.bdd.helper.RequestHelper;
 import br.com.lanchonetebairro.enterpriserules.enums.CategoriaProduto;
 import br.com.lanchonetebairro.interfaceadapters.dto.CriacaoProdutoDTO;
 import br.com.lanchonetebairro.interfaceadapters.dto.ProdutoResponseDTO;
 import io.cucumber.java.pt.Dado;
 import io.cucumber.java.pt.E;
-import io.cucumber.java.pt.Então;
+import io.cucumber.java.pt.Entao;
 import io.cucumber.java.pt.Quando;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
+import org.junit.Assert;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class ProdutoStepDefinition {
-    private final RestTemplate restTemplate = new RestTemplate();
+    private static final String PATCH = "/v1/produtos";
+    private RequestHelper<ProdutoResponseDTO> requestSingleHelper;
+    private RequestHelper<ProdutoResponseDTO[]> requestListHelper;
 
-    private final String baseUrl = "http://localhost:8080";
-    private String parameters;
-
-
-    private ProdutoResponseDTO produtoCriado;
-    private CriacaoProdutoDTO produtoDTO;
-    private Long idProduto;
-    private String categoriaProduto;
-    private String parametroBusca;
-
-    private List<ProdutoResponseDTO> produtosEncontrados;
+    private CriacaoProdutoDTO produtoCriacaoDto;
     private ProdutoResponseDTO produtoEncontrado;
 
-    HttpStatusCode statusCode;
-    String responseBody;
+    @Dado("que exista um produto registrado no sistema com o nome {string}")
+    public void dadoQueExista(String nome) {
+        ProdutoResponseDTO[] produtos = RequestHelper
+                .realizar(PATCH, HttpMethod.GET, null, ProdutoResponseDTO[].class)
+                .validaStatusEqualsTo(HttpStatus.OK).getSuccessResponse().getBody();
 
-    @Dado("que exista um produto com id {long} e o atributo {string} diferente a {string}")
-    public void queExistaUmProdutoComIdEOAtributoDiferenteA(Long id, String atributo, String valor) {
-        try {
-            ResponseEntity<ProdutoResponseDTO> response = restTemplate.getForEntity(baseUrl + "/v1/produtos/" + id, ProdutoResponseDTO.class);
-            ProdutoResponseDTO produtoCriado = response.getBody();
-            Object atributoProduto = buscarAtributoProduto(atributo, produtoCriado);
-            assertNotEquals(valor, atributoProduto);
-        } catch (HttpClientErrorException e) {
-            CriacaoProdutoDTO produtoDTO = new CriacaoProdutoDTO("Produto",  CategoriaProduto.BEBIDA, BigDecimal.valueOf(10),"Descrição", "Imagem");
-            restTemplate.postForEntity(baseUrl + "/v1/produtos", produtoDTO, ProdutoResponseDTO.class);
-        }
+        assert produtos != null;
+        this.produtoEncontrado = Arrays.stream(produtos)
+                .filter(p -> p.getNome().equals(nome))
+                .findAny()
+                .orElse(null);
+
+        Assert.assertNotNull("Produto não encontrado", produtoEncontrado);
     }
 
-    @Dado("que um usuário queira cadastrar um produto com nome {string} e preço {bigdecimal} e categoria {string}")
-    public void usuarioQuerCadastrarProdutoComNomeEPreco(String nomeProduto, BigDecimal precoProduto, String categoriaProduto) {
-        this.produtoDTO = criacaoProdutoDto(nomeProduto, precoProduto, categoriaProduto);
+    @Dado("que nao exista um produto registrado no sistema com o nome {string}")
+    public void dadoQueNaoExista(String nome) {
+        ProdutoResponseDTO[] produtos = RequestHelper
+                .realizar(PATCH, HttpMethod.GET, null, ProdutoResponseDTO[].class)
+                .validaStatusEqualsTo(HttpStatus.OK).getSuccessResponse().getBody();
+
+        assert produtos != null;
+        ProdutoResponseDTO produtoEncontrado = Arrays.stream(produtos)
+                .filter(p -> p.getNome().equals(nome))
+                .findAny()
+                .orElse(null);
+
+        Assert.assertNull("Produto encontrado", produtoEncontrado);
     }
 
-    @Dado("que um usuário queira buscar todos os produtos")
-    public void queUmUsuarioQueiraBuscarTodosOsProdutos() {
-        this.parameters = "/";
+    @E("o preco do produto seja diferente a {bigdecimal}")
+    public void precoDiferenteA(BigDecimal preco) {
+        Assert.assertNotEquals("Preco diferente", produtoEncontrado.getPreco(), preco);
     }
 
-    @Dado("que um usuário queira buscar todos os produtos da categoria {string}")
-    public void queUmUsuarioQueiraBuscarTodosOsProdutosDaCategoria(String categoria) {
-        this.parameters = "/?categoria="+categoria;
+    @E("categoria do produto seja diferente a {string}")
+    public void categoriaDiferenteA(String categoria) {
+        Assert.assertNotEquals("Categoria diferente", produtoEncontrado.getCategoria(), CategoriaProduto.valueOf(categoria));
     }
 
-    @Dado("que um usuário queira buscar todos pelo parametro {string} chamado {string}")
-    public void queUmUsuarioQueiraBuscarTodos(String parametro, String valor) {
-        this.parametroBusca = "?" + parametro + "=" + valor;
+    @Dado("for realizado uma busca nos produtos pela categoria {string}")
+    public void forRealizadoUmaBusca(String categoria) {
+        String parameters = "?categoria=" + categoria;
+        this.requestListHelper = RequestHelper
+                .realizar(PATCH + parameters, HttpMethod.GET, null, ProdutoResponseDTO[].class);
     }
 
-    @Dado("que um usuário queira buscar o produto com o ID {int}")
-    public void queUmUsuarioQueiraBuscarOProdutoComOID(long idProduto) {
-        this.idProduto = idProduto;
+    @Quando("for realizado uma busca nos produtos pelo id {long}")
+    public void forRealizadoBuscaPorId(Long id) {
+        String parameters = "/" + id;
+        this.requestSingleHelper = RequestHelper
+                .realizar(PATCH + parameters, HttpMethod.GET, null, ProdutoResponseDTO.class);
+    }
+
+    @Quando("for criado um produto o nome igual a {string}")
+    public void quandoForCriadoUmProduto(String nome) {
+        var produtoDTO = new CriacaoProdutoDTO();
+        produtoDTO.setNome(nome);
+        this.produtoCriacaoDto = produtoDTO;
+    }
+
+    @E("preço igual a {bigdecimal}")
+    public void precoIgualA(BigDecimal preco) {
+        this.produtoCriacaoDto.setPreco(preco);
+    }
+
+    @E("categoria igual a {string}")
+    public void categoriaIgualA(String categoria) {
+        this.produtoCriacaoDto.setCategoria(CategoriaProduto.valueOf(categoria));
+    }
+
+    @E("descricao igual a {string}")
+    public void descricaoIgualA(String descricao) {
+        this.produtoCriacaoDto.setDescricao(descricao);
+    }
+
+    @E("imagem igual a {string}")
+    public void imagemIgualA(String imagem) {
+        this.produtoCriacaoDto.setImagem(imagem);
+    }
+
+    @E("o usuário enviar uma requisição com os dados do produto")
+    public void enviarRequisicao() {
+        this.requestSingleHelper = RequestHelper
+                .realizar(PATCH, HttpMethod.POST, this.produtoCriacaoDto, ProdutoResponseDTO.class);
+    }
+
+    @E("o usuário enviar uma requisição de edicao com os dados deste novo produto")
+    public void enviarRequisicaoEdicao() {
+        this.requestSingleHelper = RequestHelper
+                .realizar(PATCH + "/" + this.produtoEncontrado.getId(), HttpMethod.PUT, this.produtoCriacaoDto, ProdutoResponseDTO.class);
     }
 
 
-    @Quando("o usuário enviar uma requisição PUT para {string} com o atributo {string} igual a {string} para o id {long}")
-    public void oUsuárioEnviarUmaRequisicaoPUTParaComOAtributoIgualAParaOId(String patch, String atributo, String valor, Long id) {
-        CriacaoProdutoDTO produtoRequest = criarProduto(atributo, valor);
-
-        try {
-            ResponseEntity<ProdutoResponseDTO> response = restTemplate.exchange(baseUrl + patch + id, HttpMethod.PUT, new HttpEntity<>(produtoRequest), ProdutoResponseDTO.class);
-
-            HttpStatusCode statusCode = response.getStatusCode();
-            ProdutoResponseDTO produtoCriado = response.getBody();
-            this.statusCode = statusCode;
-            this.produtoCriado = produtoCriado;
-        } catch (HttpClientErrorException e) {
-            this.statusCode = e.getStatusCode();
-        }
+    @Entao("deve retornar um produto")
+    public void deveRetornarUmObjeto() {
+        Assert.assertNotNull("Resposta nao é nula", this.requestSingleHelper.getSuccessResponse().getBody());
     }
 
-    @Então("o resultado da busca deve conter um produto com atributo {string} igual a {string}")
-    public void oResultadoDaBuscaDeveConterUmProdutoComAtributoIgualA(String atributo, String valor) {
-        if(atributo.equals("preco")) {
-            BigDecimal valorInserido = (BigDecimal) buscarAtributoProduto(atributo, produtoCriado);
-            assertEquals(0, new BigDecimal(valor).compareTo(valorInserido));
+    @Entao("nao deve retornar um produto")
+    public void naoDeveRetornarUmCliente() {
+        Assert.assertNull("Resposta deve ser nula", this.requestSingleHelper.getSuccessResponse());
+    }
+
+    @Entao("deve retornar uma lista de produtos com {int} produtos")
+    public void deveRetornarUmaLista(int tamanhoLista) {
+        Assert.assertNotNull("Resposta nao é nula", this.requestListHelper.getSuccessResponse().getBody());
+        Assert.assertEquals("Tamanho da lista", tamanhoLista, this.requestListHelper.getSuccessResponse().getBody().length);
+    }
+
+    @E("o status da busca pelo produto deve ser igual a {int}")
+    public void oStatusDaBuscaPeloProdutoIgualA(int status) {
+        if(this.requestSingleHelper.getSuccessResponse() != null) {
+            Assert.assertEquals("Status should match", HttpStatusCode.valueOf(status), this.requestSingleHelper.getSuccessResponse().getStatusCode());
         } else {
-            assertEquals(valor, buscarAtributoProduto(atributo, produtoCriado));
+            Assert.assertEquals("Status should match", HttpStatusCode.valueOf(status), this.requestSingleHelper.getErrorResponse().getStatusCode());
         }
     }
 
-
-
-    @Quando("o usuário enviar uma requisição POST para {string} com os dados do produto")
-    public void usuarioEnviaRequisicaoPostComDadosDoProduto(String patch) {
-        try {
-            ResponseEntity<ProdutoResponseDTO> response = restTemplate.postForEntity(baseUrl + patch, this.produtoDTO, ProdutoResponseDTO.class);
-
-            HttpStatusCode statusCode = response.getStatusCode();
-            ProdutoResponseDTO produtoCriado = response.getBody();
-            this.statusCode = statusCode;
-            this.produtoCriado = produtoCriado;
-        } catch (HttpClientErrorException e) {
-            HttpStatusCode statusCode = e.getStatusCode();
-            String responseBody = e.getResponseBodyAsString();
-            this.statusCode = statusCode;
-            this.responseBody = responseBody;
+    @E("o status da busca pelos produtos deve ser igual a {int}")
+    public void oStatusDaBuscaPelosProdutosIgualA(int status) {
+        if(this.requestListHelper.getSuccessResponse() != null) {
+            Assert.assertEquals("Status should match", HttpStatusCode.valueOf(status), this.requestListHelper.getSuccessResponse().getStatusCode());
+        } else {
+            Assert.assertEquals("Status should match", HttpStatusCode.valueOf(status), this.requestListHelper.getErrorResponse().getStatusCode());
         }
     }
 
+    @E("o resultado da busca deve conter um produto com nome {string}")
+    public void oStatusDaBuscaDeveTerUmProdutoComNomeIgualA(String nome) {
+        ProdutoResponseDTO[] produtos = this.requestListHelper.getSuccessResponse().getBody();
 
+        assert produtos != null;
+        ProdutoResponseDTO produtoEncontrado = Arrays.stream(produtos)
+                .filter(p -> p.getNome().equals(nome))
+                .findAny()
+                .orElse(null);
 
-
-    @Quando("o usuário enviar uma requisição GET para {string} e o ID do produto")
-    public void oUsuárioEnviarUmaRequisicaoGETParaEOIDDoProduto(String patch) {
-        try {
-            ResponseEntity<ProdutoResponseDTO> response = restTemplate.getForEntity(baseUrl + patch + this.idProduto, ProdutoResponseDTO.class);
-
-            HttpStatusCode statusCode = response.getStatusCode();
-            ProdutoResponseDTO produtoResponseDTO = response.getBody();
-            this.statusCode = statusCode;
-            this.produtoEncontrado = produtoResponseDTO;
-        } catch (HttpClientErrorException e) {
-            HttpStatusCode statusCode = e.getStatusCode();
-            String responseBody = e.getResponseBodyAsString();
-            this.statusCode = statusCode;
-            this.responseBody = responseBody;
-        }
+        Assert.assertNotNull("Produto não encontrado", produtoEncontrado);
     }
 
-    @Quando("o usuário enviar uma requisição GET para {string} com a categoria desejada")
-    public void usuarioEnviaRequisicaoComDadosDoProduto(String patch) {
-        try {
-            ResponseEntity<List<ProdutoResponseDTO>> response = restTemplate.exchange(
-                    baseUrl + patch + parametroBusca,
-                    HttpMethod.GET,
-                    null,
-                    new ParameterizedTypeReference<>() {}
-            );
-            HttpStatusCode statusCode = response.getStatusCode();
-            List<ProdutoResponseDTO> produtoCriado = response.getBody();
-            this.statusCode = statusCode;
-            this.produtosEncontrados = produtoCriado;
-        } catch (HttpClientErrorException e) {
-            HttpStatusCode statusCode = e.getStatusCode();
-            String responseBody = e.getResponseBodyAsString();
-            this.statusCode = statusCode;
-            this.responseBody = responseBody;
-        }
+    @Entao("o resultado da busca deve conter o produto com nome {string}")
+    public void oResultadoDaBuscaDeveConterUmProdutoComNome(String nome) {
+        String nomeProdutoEncontrado = Objects.requireNonNull(this.requestSingleHelper.getSuccessResponse().getBody()).getNome();
+        Assert.assertEquals("Nome do produto encontrado", nome, nomeProdutoEncontrado);
     }
 
-    @Então("o resultado da busca deve conter um produto com nome {string} com o preço {bigdecimal}")
-    public void oResultadoDaBuscaDeveConterUmProdutoComNomeComOPreco(String nome, BigDecimal preco) {
-        assertNotNull(produtosEncontrados);
-
-        boolean produtoEncontrado = produtosEncontrados.stream()
-                .anyMatch(produto -> produto.getNome().equals(nome) && produto.getPreco().compareTo(preco) == 0);
-
-        assertTrue("Produto não encontrado com nome " + nome + " e preço " + preco, produtoEncontrado);
+    @E("o erro retornado durante a requisicao feito para o endpoint produto deve conter {string}")
+    public void erroRetornadoContem(String mensagemErro) {
+        Assert.assertNotNull("Resposta de erro nao é nula", this.requestSingleHelper.getErrorResponse().getMessage());
+        Assert.assertNull("Resposta é nula", this.requestSingleHelper.getSuccessResponse());
+        Assert.assertTrue("Mensagem de erro deve conter", Objects.requireNonNull(this.requestSingleHelper.getErrorResponse().getMessage()).contains(mensagemErro));
     }
 
-    @Então("o resultado da busca não deve conter nenhum produto")
-    public void oResultadoDaBuscaNaoDeveConterNenhumProduto() {
-        assertNotNull(produtosEncontrados);
-        assertEquals(0, produtosEncontrados.size());
-    }
-
-    @Então("o resultado da busca deve conter o produto com nome {string} com o preço {bigdecimal}")
-    public void oResultadoDaBuscaDeveConterOProdutoComNomeComOPreco(String nome, BigDecimal preco) {
-        assertNotNull(produtoEncontrado);
-        assertEquals(nome, produtoEncontrado.getNome());
-        assertEquals(preco, produtoEncontrado.getPreco());
-    }
-
-    @Então("o resultado da busca deve ser vazio")
-    public void oResultadoDaBuscaDeveSerVazio() {
-        assertNull(produtoEncontrado);
-    }
-
-    @Então("o resultado da busca deve ser uma lista vazia")
-    public void oResultadoDaBuscaDeveSerUmaListaVazia() {
-        assertNotNull(produtosEncontrados);
-        assertEquals(0, produtosEncontrados.size());
-    }
-
-    @E("o status deve ser {int}")
-    public void eOStatusDeveSer(int statusEsperado) {
-        assertEquals(statusCode.value(), statusEsperado);
-    }
-
-    @E("conter um erro da mensagem contendo {string}")
-    public void conterUmErroDaMensagemContendo(String mensagemErro) {
-        assertTrue(responseBody.contains(mensagemErro));
-    }
-
-
-    @E("já exista um produto com nome {string} e preço {bigdecimal} e categoria {string}")
-    public void jaExistUmProduceComNomePrecoECategorica(String nomeProdutoCriado, BigDecimal precoProduto, String categoriaProdutoCriado) {
-        CriacaoProdutoDTO produtoRequest = criacaoProdutoDto(nomeProdutoCriado, precoProduto, categoriaProdutoCriado);
-        restTemplate.postForEntity(baseUrl + "/v1/produtos", produtoRequest, ProdutoResponseDTO.class);
-    }
-
-    @E("ter dados do produto criado")
-    public void terDadosDoProdutoCriado() {
-        assertNotNull(produtoCriado);
-        assertEquals(produtoDTO.getNome(), produtoCriado.getNome());
-    }
-
-    private CriacaoProdutoDTO criacaoProdutoDto(String nomeProdutoCriado, BigDecimal precoProduto, String categoriaProdutoCriado) {
-        CriacaoProdutoDTO produtoRequest = new CriacaoProdutoDTO();
-        produtoRequest.setNome(nomeProdutoCriado);
-        produtoRequest.setPreco(precoProduto);
-        produtoRequest.setCategoria(CategoriaProduto.valueOf(categoriaProdutoCriado));
-        return produtoRequest;
-    }
-
-    private CriacaoProdutoDTO criarProduto(String atributo, String valor) {
-        CriacaoProdutoDTO produtoDTO = new CriacaoProdutoDTO();
-        return switch (atributo) {
-            case "nome":
-                produtoDTO.setNome(valor);
-                yield produtoDTO;
-            case "preco":
-                produtoDTO.setPreco(new BigDecimal(valor));
-                yield produtoDTO;
-            case "categoria":
-                produtoDTO.setCategoria(CategoriaProduto.valueOf(valor));
-                yield produtoDTO;
-            case "descricao":
-                produtoDTO.setDescricao(valor);
-                yield produtoDTO;
-            case "imagem":
-                produtoDTO.setImagem(valor);
-                yield produtoDTO;
-            default:
-                throw new IllegalStateException("Unexpected value: " + atributo);
-        };
-    }
-
-    private Object buscarAtributoProduto(String atributo, ProdutoResponseDTO produto) {
-        return switch (atributo) {
-            case "nome":
-                yield produto.getNome();
-            case "preco":
-                yield produto.getPreco();
-            case "categoria":
-                yield produto.getCategoria();
-            case "descricao":
-                yield produto.getDescricao();
-            case "imagem":
-                yield produto.getImagem();
-            default:
-                throw new IllegalStateException("Unexpected value: " + atributo);
-        };
-    }
 }

@@ -23,6 +23,7 @@ public class CriacaoProdutoDTO {
     @NotBlank(message = "Nome do produto é obrigatório")
     @Schema(description = "Nome do produto")
     private String nome;
+
     @NotNull(message = "Categoria é obrigatória")
     @Schema(description = "Categoria do produto.", enumAsRef = true)
     private CategoriaProduto categoria;
