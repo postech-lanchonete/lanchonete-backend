@@ -1,4 +1,4 @@
-package br.com.lanchonetebairro.api.controllers;
+package br.com.lanchonetebairro.integrationTest;
 
 import br.com.lanchonetebairro.enterpriserules.entities.Cliente;
 import br.com.lanchonetebairro.interfaceadapters.dto.CriacaoClienteDTO;

@@ -1,4 +1,4 @@
-package br.com.lanchonetebairro.api.controllers;
+package br.com.lanchonetebairro.integrationTest;
 
 import br.com.lanchonetebairro.enterpriserules.entities.Cliente;
 import br.com.lanchonetebairro.enterpriserules.entities.Pedido;
@@ -30,7 +30,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -166,7 +166,7 @@ class PedidoControllerIntegrationTest {
         Cliente cliente = criarCliente("123456789");
         Pedido pedido = criarPedido(new ArrayList<>(List.of(produtoHamburguer)), cliente, StatusDoPedido.RECEBIDO);
 
-        mockMvc.perform(patch("/v1/pedidos/{id}/status", pedido.getId()))
+        mockMvc.perform(put("/v1/pedidos/{id}/status", pedido.getId()))
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.status", is("EM_PREPARACAO")));
     }
@@ -177,7 +177,7 @@ class PedidoControllerIntegrationTest {
         Cliente cliente = criarCliente("123456789");
         Pedido pedido = criarPedido(new ArrayList<>(List.of(produtoHamburguer)), cliente, StatusDoPedido.EM_PREPARACAO);
         Long id = pedido.getId();
-        mockMvc.perform(patch(String.format("/v1/pedidos/%d/status", id)))
+        mockMvc.perform(put(String.format("/v1/pedidos/%d/status", id)))
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.status", is("PRONTO")));
     }
@@ -188,7 +188,7 @@ class PedidoControllerIntegrationTest {
         Cliente cliente = criarCliente("123456789");
         Pedido pedido = criarPedido(new ArrayList<>(List.of(produtoHamburguer)), cliente, StatusDoPedido.PRONTO);
 
-        mockMvc.perform(patch("/v1/pedidos/{id}/status", pedido.getId()))
+        mockMvc.perform(put("/v1/pedidos/{id}/status", pedido.getId()))
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.status", is("FINALIZADO")));
     }
@@ -199,7 +199,7 @@ class PedidoControllerIntegrationTest {
         Cliente cliente = criarCliente("123456789");
         Pedido pedido = criarPedido(new ArrayList<>(List.of(produtoHamburguer)), cliente, StatusDoPedido.FINALIZADO);
 
-        mockMvc.perform(patch("/v1/pedidos/{id}/status", pedido.getId()))
+        mockMvc.perform(put("/v1/pedidos/{id}/status", pedido.getId()))
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.status", is("FINALIZADO")));
     }

@@ -39,11 +39,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.1.0'
-    implementation "org.mapstruct:mapstruct:${mapstructVersion}", "org.projectlombok:lombok:${lombokVersion}"
-    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}", "org.projectlombok:lombok:${lombokVersion}", "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+	implementation "org.mapstruct:mapstruct:${mapstructVersion}", "org.projectlombok:lombok:${lombokVersion}"
+	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}", "org.projectlombok:lombok:${lombokVersion}", "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
 	implementation 'org.hsqldb:hsqldb:2.7.1'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    implementation 'org.jacoco:org.jacoco.core:0.8.7'
+	implementation 'org.jacoco:org.jacoco.core:0.8.7'
 	implementation 'io.cucumber:cucumber-spring:7.0.0'
 	implementation 'io.cucumber:cucumber-java:7.0.0'
 	implementation 'io.cucumber:cucumber-java8:7.0.0'
@@ -56,39 +56,10 @@ dependencies {
 	testImplementation 'io.cucumber:cucumber-junit:7.0.0'
 }
 
-//dependencies {
-//	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-//	implementation 'org.springframework.boot:spring-boot-starter-web'
-//	implementation 'org.springframework.boot:spring-boot-starter-validation'
-//	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-//	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
-//	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.1.0'
-//	implementation "org.mapstruct:mapstruct:${mapstructVersion}", "org.projectlombok:lombok:${lombokVersion}"
-//	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}", "org.projectlombok:lombok:${lombokVersion}", "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
-//	implementation 'org.hsqldb:hsqldb:2.7.1'
-//	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//	implementation 'org.jacoco:org.jacoco.core:0.8.7'
-//	implementation 'io.cucumber:cucumber-spring:7.0.0'
-//	implementation 'io.cucumber:cucumber-java:7.0.0'
-//	implementation 'io.cucumber:cucumber-java8:7.0.0'
-//	implementation 'io.cucumber:cucumber-junit:7.0.0'
-//	implementation 'io.cucumber:cucumber-core:7.0.0'
-//	implementation 'io.cucumber:gherkin:15.0.0'
-//}
-
 sourceSets {
 	main {
 		ext.originalJavaSrcDirs = java.srcDirs
 		java.srcDir "${generatedMapperSourcesDir}"
-	}
-
-	integrationTest {
-		compileClasspath += sourceSets.main.output + sourceSets.test.output
-		runtimeClasspath += sourceSets.main.output + sourceSets.test.output
-	}
-	cucumber {
-		compileClasspath += sourceSets.main.output + sourceSets.test.output
-		runtimeClasspath += sourceSets.main.output + sourceSets.test.output
 	}
 }
 
@@ -122,61 +93,29 @@ task generateMainMapperClasses(type: JavaCompile) {
 	}
 }
 
-task unitTest(type: Test) {
-	testClassesDirs = sourceSets.test.output.classesDirs
-	classpath = sourceSets.test.runtimeClasspath
+task cucumberCli() {
+	dependsOn assemble, testClasses
+	doLast {
+		javaexec {
+			main = "io.cucumber.core.cli.Main"
+			classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+			args = [
+					'--plugin', 'pretty',
+					'--plugin', 'html:target/cucumber-report.html',
+					'src/test/resources']
+		}
+	}
 }
 
-task integrationTest(type: Test) {
-	testClassesDirs = sourceSets.integrationTest.output.classesDirs
-	classpath = sourceSets.integrationTest.runtimeClasspath
+tasks.named('test') {
+	useJUnitPlatform()
 }
 
-task cucumberTest(type: Test) {
-	testClassesDirs = sourceSets.cucumber.output.classesDirs
-	classpath = sourceSets.cucumber.runtimeClasspath
+
+jacoco {
+	toolVersion = '0.8.10'
 }
 
-task combinedTests(type: Test) {
-	dependsOn unitTest, integrationTest, cucumberTest
-}
-
-//jacocoTestReport {
-//	dependsOn combinedTests
-//	getExecutionData().from(fileTree("$buildDir").include("**/jacoco/*.exec"))
-//
-//	reports {
-//		xml.required.set(true)
-//		xml.destination(file("$buildDir/reports/jacoco/combined/jacocoCombined.xml"))
-//	}
-//}
-
-test {
-	finalizedBy jacocoTestReport
-}
-
-//tasks.named('test') {
-//	useJUnitPlatform()
-//	useJUnit()
-//}
-
-//task startSpringBoot(type: Exec) {
-//	commandLine 'nohup ./gradlew bootrun >application.log 2>&1 ', '&'
-//}
-//
-//task stopSpringBoot(type: Exec) {
-//	// Comando para parar a aplicação Spring Boot, por exemplo:
-//	commandLine 'kill $(lsof -t -i:8080)'
-//}
-//
-//test.dependsOn startSpringBoot
-//test.finalizedBy stopSpringBoot
-
-
-//jacoco {
-//	toolVersion = '0.8.10'
-//}
-//
 jacocoTestReport {
 	getExecutionData().setFrom(fileTree(buildDir).include('/jacoco/*.exec'))
 	reports {
@@ -186,10 +125,10 @@ jacocoTestReport {
 	}
 	dependsOn test
 }
-//
-//test {
-//	finalizedBy jacocoTestReport
-//}
+
+test {
+	finalizedBy jacocoTestReport
+}
 
 sonar {
 	properties {

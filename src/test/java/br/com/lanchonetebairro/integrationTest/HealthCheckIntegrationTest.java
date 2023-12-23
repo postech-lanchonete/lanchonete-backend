@@ -1,4 +1,4 @@
-package br.com.lanchonetebairro.api.controllers;
+package br.com.lanchonetebairro.integrationTest;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

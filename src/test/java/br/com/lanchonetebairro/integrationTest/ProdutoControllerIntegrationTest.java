@@ -1,4 +1,4 @@
-package br.com.lanchonetebairro.api.controllers;
+package br.com.lanchonetebairro.integrationTest;
 
 import br.com.lanchonetebairro.enterpriserules.entities.Produto;
 import br.com.lanchonetebairro.enterpriserules.enums.CategoriaProduto;
