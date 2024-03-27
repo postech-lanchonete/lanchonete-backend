@@ -1,3 +1,11 @@
+<p align="center">
+  Deprecated
+</p>
+
+<p align="center">
+  Este projeto foi descontinuado em detrimento de uma estratégia de microservicos. A documentação destes novos projetos podem ser encontrados <a href="https://github.com/postech-lanchonete">neste link.</a>
+</p>
+
 # 🍔 Lanchonete do Bairro - Backend
 
 ##### versão 1.0.0-POC
